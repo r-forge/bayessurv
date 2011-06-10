@@ -1,10 +1,10 @@
 Package: bayessurv
 Type: Package
-Title: What the package does (short line)
+Title: BayesSurv - a package for estimating mortality parameters from incomplete data
 Version: 1.0
 Date: 2011-06-10
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Author: Fernando Colchero, Owen Jones, Maren Rebke
+Maintainer: Fernando Colchero <colchero@mpg.demogr.de>
 Description: More about what it does (maybe more than one line)
-License: What license is it under?
+License: GNU GPL
 LazyLoad: yes
