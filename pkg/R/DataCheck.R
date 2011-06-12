@@ -1,5 +1,7 @@
-DataCheck <-
-function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
+#Function: Error checking routines for BayeSurv Data.
+#Author: Owen R. Jones, Maren Rebke, Fernando Colchero
+
+DataCheck <- function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
 
 #ToDo: add code to specify variations on what to do with the autofix
 
@@ -11,7 +13,8 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
 	n          = nrow(Data)
 	bd         = as.matrix(Data[,2:3])
 	Y          = as.matrix(Data[,1:nt+3]); colnames(Y) = st
-
+	Tm         = matrix(st, n, nt, byrow=TRUE)
+	
 	if(ncol(Data)>nt+3){
 		Z  = as.matrix(Data[,(nt+4):ncol(Data)])
 	} else {
@@ -89,12 +92,17 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         
         #Actions - remove spurious post-death observations
         if (autofix == TRUE) {
-            dyr = bd[type3, 2]
-            dyr = dyr - Ti + 1
+        	 Ymd  = ((Tm - bd[,2]) * Y)[type3,]
+        	 Ymd[Ymd>0]  = 0
+        	 Ymd[Ymd<0]   = 1
+        	 Y[type3,]  = Ymd
+        	 
+#            dyr = bd[type3, 2]
+#            dyr = dyr - Ti + 1
             
-            for (i in 1:length(type3)) {
-                Y[type3[i], (dyr[i]):ncol(Y)] = rep(0, length((dyr[i]):ncol(Y)))
-            }
+#            for (i in 1:length(type3)) {
+#                Y[type3[i], (dyr[i]):ncol(Y)] = rep(0, length((dyr[i]):ncol(Y)))
+#            }
        cat("Observations that post-date year of death have been removed.\n\n")
        }
     }
@@ -110,12 +118,17 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         
         #Actions - remove spurious pre-birth observations
         if (autofix == TRUE) {
-            byr = bd[, 1][type4]
-            byr = byr - Ti
+        	 Ymd  = ((Tm - bd[,1]) * Y)[type4,]
+        	 Ymd[Ymd>0]  = 1
+        	 Ymd[Ymd<0]   = 0
+        	 Y[type4,]  = Ymd
             
-            for (i in 1:length(type4)) {
-                Y[type4[i], (1:byr[i])] = rep(0, length(1:byr[i]))
-            }
+#            byr = bd[type4, 1]
+#            byr = byr - Ti
+            
+#            for (i in 1:length(type4)) {
+#                Y[type4[i], (1:byr[i])] = rep(0, length(1:byr[i]))
+#            }
               cat("Observations that pre-date year of birth have been removed.\n\n")
 
        }
@@ -181,4 +194,3 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
             type5=type5))
     }
 }
-
