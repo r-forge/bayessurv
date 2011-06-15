@@ -1,4 +1,5 @@
-BayesSurvPlots    = function(outBS){
+BayesSurvPlots <-
+function(outBS){
 	require(RColorBrewer)
 	if(.Platform$OS.type=="unix") devtype=quartz else devtype=windows
 for(i in dev.list()) dev.off()
