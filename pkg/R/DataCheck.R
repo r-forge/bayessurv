@@ -1,7 +1,5 @@
-#Function: Error checking routines for BayeSurv Data.
-#Author: Owen R. Jones, Maren Rebke, Fernando Colchero
-
-DataCheck <- function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
+DataCheck <-
+function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
 
 #ToDo: add code to specify variations on what to do with the autofix
 
@@ -194,3 +192,4 @@ DataCheck <- function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
             type5=type5))
     }
 }
+
