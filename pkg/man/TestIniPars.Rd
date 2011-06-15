@@ -185,20 +185,19 @@ function(Data, ini.pars=NULL, ststart, stend, model="SI", jumps=NULL){
 	idtrg       = which(bg<Ti)
 	
 	# Calculate likelihood:
-	px          = sum(log(f.g(xg + 0.5*Dx, Zthg))) - sum(log(S.g(Ti-bg[idtrg] + 0.5*Dx, Zthg[idtrg,])))
+	px          = sum(fx.fun(xg + 0.5*Dx, Zthg, idm=idm, log=TRUE)) - sum(Sx.fun(Ti-bg[idtrg] + 0.5*Dx, Zthg[idtrg,], idm=idm, log=TRUE))
 	
 	if(is.na(px) | px==-Inf) ModifyPars = TRUE else ModifyPars = FALSE
 	
 	# Calculate likelihood with range for inipars:
-#	thnl        = matrix(qtnorm(rep(0.005,nth*nz), mean=c(thg), sd=c(thj), lower=c(low)), nz, nth) * modm[rep(idm,nz), ]
 	thnl        = matrix(qtnorm(rep(c(0.995, 0.005, 0.995,0.995, 0.995),each=nz), mean=c(thg), sd=c(thj), lower=c(low)), nz, nth) * modm[rep(idm,nz), ]
 	
 	Zthnl       = Z \%*\% thnl
-	pxl         = sum(log(f.g(xg + 0.5*Dx, Zthnl))) - sum(log(S.g(Ti-bg[idtrg] + 0.5*Dx, Zthnl[idtrg,])))
+	pxl         = sum(fx.fun(xg + 0.5*Dx, Zthnl, idm=idm, log=TRUE)) - sum(Sx.fun(Ti-bg[idtrg] + 0.5*Dx, Zthnl[idtrg,], idm=idm, log=TRUE))
 
 	thnu        = matrix(qtnorm(rep(c(0.005, 0.995, 0.005, 0.005, 0.005),each=nz), mean=c(thg), sd=c(thj), lower=c(low)), nz, nth)* modm[rep(idm,nz), ]
 	Zthnu       = Z \%*\% thnu
-	pxu         = sum(log(f.g(xg + 0.5*Dx, Zthnu))) - sum(log(S.g(Ti-bg[idtrg] + 0.5*Dx, Zthnu[idtrg,])))
+	pxu         = sum(fx.fun(xg + 0.5*Dx, Zthnu, idm=idm, log=TRUE)) - sum(Sx.fun(Ti-bg[idtrg] + 0.5*Dx, Zthnu[idtrg,], idm=idm, log=TRUE))
 
 	if(is.na(pxl) | pxl==-Inf | is.na(pxu) | pxu==Inf) ModifyJumps = TRUE else ModifyJumps = FALSE
 
