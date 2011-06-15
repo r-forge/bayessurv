@@ -1,69 +1,33 @@
 \name{MakeCovariateMatrix}
 \alias{MakeCovariateMatrix}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
+
+\title{A function to produce a covariate matrix for BayesSurv analysis.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+This function produces an n-column covariate matrix from a factor-Class vector with n levels.}
 \usage{
 MakeCovariateMatrix(x)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+  \item{x}{A factor-Class vector.}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+\details{This function produces an n-column covariate matrix from a factor-Class vector with n levels.}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+\value{Returns a matrix with a number of rows equal to the number of individuals, and a column for each level in the input vector.}
+
+\references{ }
+
+\author{Owen R. Jones}
+
+\note{ }
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(x) {
-    if (class(x) != "factor") 
-        stop("x is not a factor")
-    
-    vL = length(x)
-    nLevs = length(levels(x))
-    a = (vL * nLevs) - nLevs
-    sv = seq(0, a, nLevs) + as.numeric(x)
-    MV = rep(0, vL * nLevs)
-    MV[sv] = 1
-    M = matrix(MV, ncol = nLevs, nrow = vL, byrow = TRUE)
-    colnames(M) = levels(x)
-    
-    return(M)
+  \code{\link{BayesSurv}}
   }
+
+\examples{
+sex <- as.factor(c("M","F","M","M","M","F","F","F","M","M"))
+MakeCovariateMatrix(sex)
+
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ methods }
