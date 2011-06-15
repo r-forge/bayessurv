@@ -5,8 +5,11 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	require(msm)
 
     #Check that niter, burnin, and thinning are compatible.
-    if(burnin>niter) stop("Burnin larger than niter.")
-    if(thinning>niter) stop("Thinning larger than niter.")
+    if(burnin>niter) stop("\nObject 'burnin' larger than 'niter'.")
+    if(thinning>niter) stop("\nObject 'thinning' larger than 'niter'.")
+
+	# Check that nsim is larger than 1:
+	if(nsim<=1) stop("\nObject nsim needs to be larger than 1.")
 
 	# Basic error checking:
 	tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
@@ -14,10 +17,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 
 	# Model Matrix and boundary values for parameters:
 	nth         = 5
-	modm        = matrix(1, 3, nth)
-	modm[1,1:3] = 0
-	modm[2,1:2] = 0
-	dimnames(modm) = list(c("GO", "GM", "SI"), c("alpha1", "beta1","c","alpha2","beta2"))
+	modm        = matrix(c(0,0,1,0,0,1,0,rep(1,8)), 3, nth, dimnames=list(c("GO", "GM", "SI"), c("alpha1", "beta1","c","alpha2","beta2")))
 	idm         = which(rownames(modm)==model)
 	nthm        = sum(modm[idm,])
 	th.low      = matrix(-Inf, nrow(modm),nth, dimnames=dimnames(modm))
@@ -50,9 +50,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		}
 	}
 
-	sets = c()
-	for(i in 1:nsim){sets = c(sets,paste("set",i,collapse=""))}
-	rownames(ini.pars.mat) = sets
+	rownames(ini.pars.mat) = paste('set.', 1:nsim, sep="")
 	print("Set of initial parameters:")
 	print(ini.pars.mat)
 	
@@ -75,7 +73,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		} else {
 			require(snowfall)
 			sfInit(parallel=TRUE, cpus=ncpus)
-			sfExport("Data", "ststart", "stend", "model", "niter", "burnin", "thinning", "rptp", "jumps", "ini.pars.mat", "priors", "BayesSurv", "DataCheck", "BayesSurvDIC", "fx.fun", "mx.fun", "Sx.fun", "ObsMatFun", "c.low")
+			sfExport("Data", "ststart", "stend", "model", "niter", "burnin", "thinning", "rptp", "jumps", "ini.pars.mat", "priors", "BayesSurv", "DataCheck", "BayesSurvDIC", "fx.fun", "mx.fun", "Sx.fun", "ObsMatFun", "c.low","parallel","lifetable")
 			sfLibrary(msm)
 			cat("\nMultiple simulations started.\n")
 			OutBS = sfClusterApplyLB(1:nsim, paralBS)
@@ -90,14 +88,80 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		cat("\nMultiple simulations finished.\n")
 	}
 
-	# Convergence diagnostics (potential scale reduction):
+
+	# Collect results:
+	simname    = paste("Sim.", 1:nsim, sep="")
 	tnth       = ncol(OutBS[[1]]$theta)
-	thint      = seq(burnin, niter, thinning)
-	nthin      = length(thint)
-	parr       = array(NA, dim=c(nthin, tnth, nsim))
-	for(i in 1:nsim) parr[,,i]  = OutBS[[i]]$theta[thint,]
-	Means      = t(apply(parr, c(2,3), mean))
-	Vars       = t(apply(parr, c(2,3), var))
+	tnpi       = ncol(OutBS[[1]]$pi)
+	tnni       = ncol(OutBS[[1]]$bis)
+	tnpo       = ncol(OutBS[[1]]$post)
+	thing      = seq(burnin, niter, thinning)
+	nthin      = length(thing)
+	thmat      = array(NA, dim=c(nthin, tnth, nsim), dimnames=list(NULL, colnames(OutBS[[1]]$theta), simname)) 
+	pimat      = array(NA, dim=c(nthin, tnpi, nsim), dimnames=list(NULL, colnames(OutBS[[1]]$pi), simname)) 
+	bimat      = array(NA, dim=c(nthin, tnni, nsim), dimnames=list(NULL, NULL, simname))
+	ximat      = array(NA, dim=c(nthin, tnni, nsim), dimnames=list(NULL, NULL, simname))
+	pomat      = array(NA, dim=c(nthin, tnpo, nsim), dimnames=list(NULL, colnames(OutBS[[1]]$post), simname))
+	DImat      = matrix(NA, nsim, 5, dimnames = list(simname, colnames(OutBS[[1]]$ModSel))) 
+	for(i in 1:nsim){
+		thmat[,,i]  = OutBS[[i]]$theta[thing,]
+		pimat[,,i]  = OutBS[[i]]$pi[thing,]
+		bimat[,,i]  = OutBS[[i]]$bis
+		ximat[,,i]  = OutBS[[i]]$dis - OutBS[[i]]$bis
+		pomat[,,i]  = OutBS[[i]]$post[thing,]
+		DImat[i,]   = OutBS[[i]]$ModSel
+	} 
+
+	# RESULTS SUMMARY:
+	# Mean, standard error and 95% credible 
+	# intervals for survival parameters:
+	thq       = cbind(apply(thmat,2,mean), 
+	            apply(thmat,2, function(x) sd(c(x))), 
+	            t(apply(thmat, 2, 
+	            quantile, c(0.025, 0.975))))
+	colnames(thq) = c("Mean", "se", "2.5%", "97.5%")
+
+	# Mean, standard error and 95% credible 
+	# intervals for recapture parameters:
+	if(ncol(pimat)>1){
+		piq       = cbind(apply(pimat,2,mean), 
+		            apply(pimat,2, function(x) sd(c(x))), 
+		            t(apply(pimat, 2, 
+		            quantile, c(0.025, 0.975))))
+		colnames(piq) = colnames(thq)
+	} else {
+		piq       = c(mean(pimat), 
+		            sd(pimat), 
+		            quantile(pimat, c(0.025, 0.975)))
+		names(piq) = colnames(thq)	
+	}
+
+	# Median and upper and lower 95% credible 
+	#intervals for latent states (i.e. ages at death):
+	xq        = apply(ximat, 2, 
+	            quantile, c(0.5, 0.025, 0.975))
+	bq        = apply(bimat, 2, 
+	            quantile, c(0.5, 0.025, 0.975))
+
+	# Summary Survival and mortality functions:
+	S.x         = function(th) Sx.fun(xv, matrix(th,1,nth), idm=idm)
+	m.x         = function(th) mx.fun(xv, matrix(th,1,nth), idm=idm)
+
+	# Median and 95% predictive intervals for survival and mortality:
+	nz        = ncol(OutBS[[1]]$Z)
+	pmat      = matrix(0, 0, nth * nz); colnames(pmat) = colnames(thmat)
+	for(i in 1:nsim) pmat = rbind(pmat, thmat[,,i])
+#	pmat      = matrix(0, length(thing), nth * nz); colnames(pmat) = pname
+#	pmat[,colnames(thgibbs)] = thmat
+	xv        = seq(0, max(xq), 0.1)
+	Sxq       = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
+	            "[",zz,"]", sep="")],1,S.x),1, quantile, c(0.5,0.025,0.975)))
+	mxq       = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
+	            "[",zz,"]", sep="")],1,m.x),1, quantile, c(0.5,0.025,0.975)))
+
+	# Convergence diagnostics (potential scale reduction):
+	Means      = t(apply(thmat, c(2,3), mean))
+	Vars       = t(apply(thmat, c(2,3), var))
 	meanall    = apply(Means,2,mean)
 	B          = nthin/(nsim-1)*apply(t((t(Means)-meanall)^2),2,sum)
 	W          = 1/nsim*apply(Vars,2,sum)
@@ -106,9 +170,10 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	conv       = cbind(B,W,Varpl,Rhat)
 	rownames(conv) = colnames(OutBS[[1]]$theta)
 
-	# Final output:
-	OutBS$Ini.Pars = ini.pars.mat
-	OutBS$Converge = conv
-	return(OutBS)
+
+	#Return a list object
+	output = list(bd = OutBS[[1]]$bd,Y = OutBS[[1]]$Y,Z = OutBS[[1]]$Z, post=pomat, ng=niter, bng = burnin, thint = thing, theta=thmat, pi = pimat, bis = bimat, xis = ximat, thsum = thq, pisum=piq, xqsum=xq, Sxsum = Sxq, mxsum = mxq, modm=modm, idm=idm, jumps=jumps, ini.pars=ini.pars.mat, priors=priors, convergence=conv)
+
+	return(output)
 }
 
