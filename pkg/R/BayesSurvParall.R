@@ -71,7 +71,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		} else {
 			require(snowfall)
 			sfInit(parallel=TRUE, cpus=ncpus)
-			sfExport("Data", "ststart", "stend", "model", "niter", "burnin", "thinning", "rptp", "jumps", "ini.pars.mat", "priors", "BayesSurv", "DataCheck", "BayesSurvDIC", "fx.fun", "mx.fun", "Sx.fun")
+			sfExport("Data", "ststart", "stend", "model", "niter", "burnin", "thinning", "rptp", "jumps", "ini.pars.mat", "priors", "BayesSurv", "DataCheck", "BayesSurvDIC", "fx.fun", "mx.fun", "Sx.fun", "ObsMatFun", "c.low")
 			sfLibrary(msm)
 			cat("\nMultiple simulations started.\n")
 			OutBS = sfClusterApplyLB(1:nsim, paralBS)
