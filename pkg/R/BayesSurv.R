@@ -1,12 +1,13 @@
 BayesSurv <-
-function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50, 
-  rptp = ststart, jumps=NULL, ini.pars=NULL, priors=NULL, lifetable = TRUE){
+function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50, rptp = ststart, jumps=NULL, ini.pars=NULL, priors=NULL, lifetable = TRUE, datacheck=TRUE){
 
 	require(msm)
 	# Basic error checking:
-	tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
-	if(tempcheck[[1]] == FALSE){ stop("You have an error in Dataframe 'Data',\nplease use function 'DataCheck'") }
-
+	if(datacheck){
+		tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
+		if(tempcheck[[1]] == FALSE){ stop("You have an error in Dataframe 'Data',\nplease use function 'DataCheck'") }
+	}
+	
     #Check that niter, burnin, and thinning are compatible.
 
 	# Data formating:
@@ -28,10 +29,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 
 	# Model Matrix and boundary values for parameters:
 	nth         = 5
-	modm        = matrix(1, 3, nth)
-	modm[1,1:3] = 0
-	modm[2,1:2] = 0
-	dimnames(modm) = list(c("GO", "GM", "SI"), c("alpha1", "beta1","c","alpha2","beta2"))
+	modm        = matrix(c(0,0,1,0,0,1,0,rep(1,8)), 3, nth, dimnames=list(c("GO", "GM", "SI"), c("alpha1", "beta1","c","alpha2","beta2")))
 	pname       = paste(rep(colnames(modm),each=nz), "[",rep(colnames(Z), nth),"]", sep="")
 	idm         = which(rownames(modm)==model)
 	idth        = which(modm[rep(idm, nz),]==1)
@@ -47,16 +45,15 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	bng         = burnin
 	thint       = thinning
 
+	# Verify jumps, initial parameters and priors:
 	if(is.null(jumps)){
 		thj       = t(t(modm[rep(idm, nz),])*c(0.005, 0.005, 0.02, 0.0075, 0.001))
-		#thj       = c(0.005, 0.005, 0.02, 0.0075, 0.001)
 	} else {
 		ljumps    = length(jumps)
 		if(ljumps/nthm != round(ljumps/nthm)){
 			stop(paste("length of jumps not multiple of", nthm)) 
 		} else if(ljumps > nth*nz) {
 			stop(paste("length of jumps larger than", nthm * nz))		}
-#		thj       = c(rep(0,nth-nthm),jumps)
 		thj       = modm[rep(idm, nz), ]
 		thj[,modm[idm,]==1] = matrix(jumps,nz, sum(modm[idm,]), byrow=TRUE)
 	}
@@ -69,7 +66,6 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 			stop(paste("length of starting parameters not multiple of", nthm)) 
 		} else if(lini.pars > nth*nz) {
 			stop(paste("length of starting parameters larger than", nthm * nz))		}
-#		thg       = c(rep(0,nth-nthm),ini.pars)
 		thg       = modm[rep(idm, nz), ]
 		thg[,modm[idm,]==1] = matrix(ini.pars,nz, sum(modm[idm,]), byrow=TRUE)
 	}	
@@ -81,13 +77,12 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 			stop(paste("length of priors not multiple of", nthm)) 
 		} else if(lpriors > nth*nz) {
 			stop(paste("length of priors larger than", nthm * nz))		}
-#		thp       = c(rep(0,nth-nthm),priors)
 		thp       = modm[rep(idm, nz), ]
 		thp[,modm[idm,]==1] = matrix(priors,nz, sum(modm[idm,]), byrow=TRUE)
 	}
 
 
-	#The code:
+	# Model variables:
 	# Extract times of birth and death:
 	bi          = bd[,1]
 	di          = bd[,2]
@@ -108,38 +103,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	oi          = Y %*% rep(1, nt)
 
 
-	# FUNCTIONS:
-	# Survival and mortality:
-	m.g         = function(x,th) exp(th[,1]-th[,2]*x) * modm[idm,1]*modm[idm,2] + th[,3] + exp(th[,4] + th[,5]*x)
-	S.g         = function(x, th){
-		Sg          =  x * (-th[,3]) + exp(th[,4])/th[,5] * (1-exp(th[,5]*x))
-		if(idm==3) Sg = Sg + (exp(th[,1])/th[,2] * (exp(-th[,2]*x)-1))
-		return(exp(Sg))
-}
-	f.g         = function(x,th) m.g(x,th) * S.g(x,th)
-	S.x         = function(th) S.g(xv, matrix(th,1,nth))
-	m.x         = function(th) m.g(xv, matrix(th,1,nth))
-
-
-	# Lower bounds for parameter c:
-	c.low       = function(th){
-		if(idm==1) cl = 0
-		if(idm==2) cl = ifelse(th[5] > 0, -exp(th[4]), 0)
-		if(idm==3){
-			x.minf = (th[1]+log(th[2]) - th[4]-log(th[5]))/(th[2] + th[5])
-			cl     = -exp(th[1]-th[2]*(x.minf)) - exp(th[4]+th[5]*(x.minf))
-		}
-	return(cl)
-	}
-
-	# Observation matrices:
-	ObsMatFun   = function(f, l){
-		Fm    = Tm - f; Fm[Fm>=0] =  1; Fm[Fm<0] = 0
-		Lm    = Tm - l; Lm[Lm<=0] = -1; Lm[Lm>0] = 0
-		return(Fm * (-Lm))	
-	}
-
-	# DEFINE PRIORS:
+	# Define priors:
 	# Priors for survival parameters:
 	Zthp        = Z %*% thp
 	thv         = 0.5
@@ -148,8 +112,8 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	dxx         = 0.001
 	xx          = seq(0,100,dxx)
 	zz          = cbind(1,matrix(0, length(xx), nz-1))
-	Ex          = sum(xx*f.g(xx,zz %*% thp)*dxx)
-	v.x         = function(x) S.g(x,Zthp)/Ex
+	Ex          = sum(xx*fx.fun(xx,zz %*% thp, idm=idm)*dxx)
+	v.x         = function(x) Sx.fun(x,Zthp, idm=idm)/Ex
 
 	# Prior parameters for detection probability:
 	idpi        = findInterval(st, diffrec); names(idpi) = st
@@ -158,7 +122,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	rho2        = 0.1
 
 
-	# STARTING VALUES:
+	# Starting values:
 	# Survival parameters
 	Zthg        = Z %*% thg
 
@@ -180,15 +144,15 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 
 	xg          = dg - bg
 
-	# FULL OBSERVATION MATRIX:
+	# Full observation matrix:
 	Fg          = c(apply(cbind(Ti, bg+1), 1, max))
 	Lg          = c(apply(cbind(Tf, dg-1), 1, min))
-	Og          = ObsMatFun(Fg, Lg)
+	Og          = ObsMatFun(Fg, Lg, Tm)
 	fii         = fi; fii[bi>0 & bi>=Ti] = bi[bi>0 & bi>=Ti]+1; fii[bi>0 & bi<Ti] = Ti
 	lii         = li; lii[di>0 & di<=Tf] = di[di>0 & di<=Tf]-1; lii[di>0 & di>Tf] = Tf
-	lfi         = ObsMatFun(fii, lii)
+	lfi         = ObsMatFun(fii, lii, Tm)
 
-	# OUTPUT TABLES:
+	# Output tables:
 	thing       = seq(bng, ng, by=thint)
 	thgibbs     = matrix(NA,ng,length(idth))
 	colnames(thgibbs) = pname[idth]
@@ -198,7 +162,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	postm       = matrix(NA, ng, 3)
 	colnames(postm) = c("post.th", "post.X", "full.post")
 
-	# RUN GIBBS SAMPLER:
+	# Run Gibbs sampler:
 	if(.Platform$OS.type=="unix") devtype=quartz else devtype=windows
 	devtype(width=2, height=0.5); progrpl = dev.cur()
 	par(mar=rep(0,4))
@@ -213,7 +177,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		thn         = thg * 0
 		thn[idth]   = c(rtnorm(length(idth), thg[idth], thj[idth], lower=low[idth]))
 		if(idm>1){
-			low[,3]     = apply(thn, 1, c.low)
+			low[,3]     = apply(thn, 1, c.low, idm=idm)
 			idcl        = which(thn[,3] < low[,3])
 			if(length(idcl)>0){
 				for(cc in idcl) thn[cc,3]   = c(rtnorm(1, thg[cc,3], thj[cc,3], lower=low[cc,3]))
@@ -223,12 +187,12 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		Zthn        = Z %*% thn
 		idtrg       = which(bg<Ti)
 
-		p.thg       = sum(log(f.g(xg + 0.5*Dx, Zthg))) - 
-		              sum(log(S.g(Ti-bg[idtrg] + 0.5*Dx, Zthg[idtrg,]))) + 
+		p.thg       = sum(fx.fun(xg + 0.5*Dx, Zthg, idm=idm, log=TRUE)) - 
+		              sum(Sx.fun(Ti-bg[idtrg] + 0.5*Dx, Zthg[idtrg,], idm=idm, log=TRUE)) + 
 		              sum(dtnorm(c(thg), c(thp), thv, lower=c(low), log=TRUE)) 
 
-		p.thn       = sum(log(f.g(xg + 0.5*Dx, Zthn))) - 
-		              sum(log(S.g(Ti-bg[idtrg] + 0.5*Dx, Zthn[idtrg,]))) + 
+		p.thn       = sum(fx.fun(xg + 0.5*Dx, Zthn, idm=idm, log=TRUE)) - 
+		              sum(Sx.fun(Ti-bg[idtrg] + 0.5*Dx, Zthn[idtrg,], idm=idm, log=TRUE)) + 
 		              sum(dtnorm(c(thn), c(thp), thv, lower=c(low), log=TRUE)) 
 
 		r           = exp(p.thn-p.thg)
@@ -262,13 +226,13 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
  
 		Fn          = c(apply(cbind(Ti, bn+1), 1, max))
 		Ln          = c(apply(cbind(Tf, dn-1), 1, min))
-		On          = ObsMatFun(Fn, Ln)
+		On          = ObsMatFun(Fn, Ln, Tm)
     
-		p.bdg       = log(f.g(xg + 0.5*Dx, Zthg)) + 
+		p.bdg       = fx.fun(xg + 0.5*Dx, Zthg, idm=idm, log=TRUE) + 
 		              (Og - lfi) %*% log(1-Pig) +
 		              log(v.x(xg + 0.5*Dx))
 
-		p.bdn       = log(f.g(xn + 0.5*Dx, Zthg)) + 
+		p.bdn       = fx.fun(xn + 0.5*Dx, Zthg, idm=idm, log=TRUE) + 
 		              (On - lfi) %*% log(1-Pig) +
 		              log(v.x(xn + 0.5*Dx))
 	
@@ -322,7 +286,6 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	cat("MCMC finished running")
 	dev.off(progrpl)
 	
-	# Results:
 	# RESULTS SUMMARY:
 	# Mean, standard error and 95% credible 
 	# intervals for survival parameters:
@@ -353,6 +316,10 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	            quantile, c(0.5, 0.025, 0.975))
 	bq        = apply(bgibbs, 2, 
 	            quantile, c(0.5, 0.025, 0.975))
+
+	# Summary Survival and mortality functions:
+	S.x         = function(th) Sx.fun(xv, matrix(th,1,nth), idm=idm)
+	m.x         = function(th) mx.fun(xv, matrix(th,1,nth), idm=idm)
 
 	# Median and 95% predictive intervals for survival and mortality:
 	pmat      = matrix(0, length(thing), nth * nz); colnames(pmat) = pname
