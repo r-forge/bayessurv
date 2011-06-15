@@ -1,126 +1,33 @@
 \name{CohortLT}
 \alias{CohortLT}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
+
+\title{A function for calculating standard cohort-based life tables from age at death data.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function calculates a standard cohort-based life table from death ages.
 }
 \usage{
 CohortLT(DeathAges, ax = 0.5, n = 1)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{DeathAges}{
-%%     ~~Describe \code{DeathAges} here~~
+  \item{DeathAges}{A vector of ages at death. These can be precise (e.g. 5.4 yrs) or rounded to the integer year (e.g. 5 yrs).}
+  \item{ax}{A vector describing the averaged individual-years lived in the interval by those dying in the interval.   It is only necessary to put the first few values - further values are extrapolated to the correct dimensions. e.g. if ax is set as c(0.3, 0.5) and there are 5 rows in the life tables, ax will become c(0.3, 0.5, 0.5, 0.5, 0.5).}
+  \item{n}{n defines the interval width. The default is 1 (yr), but it can be set to be anything numerical value(s). For example, if you want small intervals for early ages, and larger intervals for older ages, you can define n as a sequence such as c(1,1,5) to indicate that the first 2 intervals are 1 year long, then the rest of the intervals are 5 years long.}
 }
-  \item{ax}{
-%%     ~~Describe \code{ax} here~~
-}
-  \item{n}{
-%%     ~~Describe \code{n} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\details{ }
+\value{The function returns a data.frame in the form of a life table with the following column headings.
+Start and end of the interval, where start of the interval is defined as x, lx (number left alive at age x), dx (number dying between ages x and x+1), mx (death rate in the cohort between ages x and x+n), ax (average person-years lived in the interval by those dying in the interval), qx (probability of dying between ages x and x+1), px (probability of surviving between ages x and x+1), Lx (person years lived between ages x and x+1), Tx (person-years lived above age x), ex (expectation of life at age x).
 }
 \references{
-%% ~put references to the literature/web site here ~
+Preston et al. 2001. Demography: Measuring and modeling population processes. Blackwell Publishers.
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+\author{Owen R. Jones}
+\note{}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{ }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+CohortLT(rpois(100,3))
 
-## The function is currently defined as
-function(DeathAges, ax = 0.5, n = 1) {
-    
-    # DeathAges should be a numeric integer vector (e.g. years)
-    #
-    # ax is a vector describing the average proportion of year lived by an individual
-    # dying during the interval. It is only necessary to put the first few values -
-    # further values are extrapolated to the correct dimensions.
-    # e.g. if ax is set as c(0.3, 0.5) and there are 5 rows in the life tables, ax
-    # will become c(0.3, 0.5, 0.5, 0.5, 0.5).
-    # If we have precise ages at death it is possible to calculate this directly from the data.
-    # I could add this in later on if necessary.
-    #
-    # n defines the interval width. The default is 1 (yr), but you can set it to be anything.
-    # If you want small intervals for early ages, and larger intervals for older ages you can put
-    # a sequence such as c(1,1,5) to indicate that the first 2 intervals are 1 year long, then
-    # the rest of the intervals are 5 years long.
-    
-    max.age = max(DeathAges, na.rm = TRUE)
-    ageseq = c(0, cumsum(n))
-    
-    if (max(ageseq) > max.age) {
-        wa = which(ageseq < max.age)
-        ageseq = ageseq[c(wa, max(wa) + 1)]
-    }
-    else {
-        fr = ageseq[length(ageseq)] + n[length(n)]
-        to = ceiling((max.age + 1)/n[length(n)]) * n[length(n)]
-        b = n[length(n)]
-        ageseq = c(ageseq, seq(fr, to, b))
-    }
-    
-    int = cbind(ageseq[1:(length(ageseq) - 1)], ageseq[2:(length(ageseq))])
-    colnames(int) = c("StartAge", "EndAge")
-    nx = int[, 2] - int[, 1]
-    
-    if (length(ax) > nrow(int)) {
-        ax = ax[1:nrow(int)]
-    }
-    if (length(ax) < nrow(int)) {
-        ax = c(ax, rep(ax[length(ax)], nrow(int) - length(ax)))
-    }
-    
-    Nx = NULL
-    Nx.plus.n = NULL
-    
-    for (x in 1:nrow(int)) {
-        Nx[x] = length(DeathAges[DeathAges >= int[x, 1]])
-        Nx.plus.n[x] = length(DeathAges[DeathAges >= int[x, 2]])
-    }
-    
-    Dx = Nx - Nx.plus.n
-    dx = Dx
-    lx = Nx
-    qx = dx/lx
-    qx[length(qx)] = 1
-    px = 1 - qx
-    Lx = ((lx - dx) * nx) + (ax * dx)
-    mx = dx/Lx
-    Tx = rev(cumsum(rev(Lx)))
-    ex = Tx/lx
-    
-#    return(data.frame(cbind(int, Nx, Dx, mx, ax, qx, px, lx, 
-#        dx, Lx, Tx, ex)))
-    return(data.frame(cbind(int, lx, dx, mx, ax, qx, px,  
-        Lx, Tx, ex)))
-  }
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{ misc }
+\keyword{ datagen }
