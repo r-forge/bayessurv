@@ -9,6 +9,8 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	}
 	
     #Check that niter, burnin, and thinning are compatible.
+    if(burnin>niter) stop("Burnin larger than niter.")
+    if(thinning>niter) stop("Thinning larger than niter.")
 
 	# Data formating:
 	Ti          = ststart
