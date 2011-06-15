@@ -4,6 +4,10 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	# Packages:
 	require(msm)
 
+    #Check that niter, burnin, and thinning are compatible.
+    if(burnin>niter) stop("Burnin larger than niter.")
+    if(thinning>niter) stop("Thinning larger than niter.")
+
 	# Basic error checking:
 	tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
 	if(tempcheck[[1]] == FALSE){ stop("You have an error in Dataframe 'Data',\nplease use function 'DataCheck'") }
