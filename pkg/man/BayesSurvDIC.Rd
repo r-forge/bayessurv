@@ -50,21 +50,18 @@ BayesSurvDIC(outBS)
 function(outBS){
 	
 # Calculate DIC
-ModSel     = matrix(0, 5, 1)
-dimnames(ModSel) = list(c("D.ave", "D.mode", "pD", "k", "DIC"))
-
-thin	   = seq(outBS$bng,outBS$ng,outBS$thint)
-L          = length(seq(outBS$bng,outBS$ng,outBS$thint))
-Dm         = rep(0,L)
-
-Dm   	   = -2*outBS$post[thin]
-DMode	   = -2*modepost[which(modepost==max(modepost))[1]] #???
-
+thin	    = seq(outBS$bng,outBS$ng,outBS$thint)
+modepost   = outBS$post[thin,3]
+L          = length(thin)
+Dm         = -2*modepost
+Dmode      = -2*modepost[which(modepost==max(modepost))[1]]
 Dave       = mean(Dm)
-pD         = Dave - DMode
-k          = length(outBS$pi)+length(outBS$theta)
-DIC        = 2*Dave - DMode
+pD         = Dave - Dmode
+k          = ncol(outBS$pi)+sum(outBS$modm[outBS$idm,]*ncol(outBS$Z))
+DIC        = 2*Dave - Dmode
 ModSel     = c(Dave, Dmode, pD, k, DIC)
+names(ModSel) = c("D.ave", "D.mode", "pD", "k", "DIC")
+
 	
 #Return ModSel
 return(ModSel)
