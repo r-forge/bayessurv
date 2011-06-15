@@ -110,27 +110,6 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	th.low["SI",c("beta1","beta2")] = 0
 
 	
-	# FUNCTIONS:
-	# Survival and mortality:
-	m.g         = function(x,th) exp(th[,1]-th[,2]*x) * modm[idm,1]*modm[idm,2] + th[,3] + exp(th[,4] + th[,5]*x)
-	S.g         = function(x, th){
-		Sg          =  x * (-th[,3]) + exp(th[,4])/th[,5] * (1-exp(th[,5]*x))
-		if(idm==3) Sg = Sg + (exp(th[,1])/th[,2] * (exp(-th[,2]*x)-1))
-		return(exp(Sg))
-  }
-	f.g         = function(x,th) m.g(x,th) * S.g(x,th)
-
-	# Lower bounds function for parameter c:
-	c.low       = function(th){
-		if(idm==1) cl = 0
-		if(idm==2) cl = ifelse(th[5] > 0, -exp(th[4]), 0)
-		if(idm==3){
-			x.minf = (th[1]+log(th[2]) - th[4]-log(th[5]))/(th[2] + th[5])
-			cl     = -exp(th[1]-th[2]*(x.minf)) - exp(th[4]+th[5]*(x.minf))
-		}
-	return(cl)
-	}
-	
 	# Construct initial parameters matrix:
 	if(is.null(ini.pars.mat)){
 		ini.pars.mat    = matrix(0, nsim, nth)
@@ -157,12 +136,16 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		}
 	}
 
+	sets = c()
+	for(i in 1:nsim){sets = c(sets,paste("set",i,collapse=""))}
+	rownames(ini.pars.mat) = sets
+	print("Set of initial parameters:")
 	print(ini.pars.mat)
 	
 	# Parallel function:
 	paralBS   = function(sim){
 		if(parallel) for(ii in 1:(sim*2)){}
-		outBS   = BayesSurv(Data=Data, ststart=ststart, stend=stend, model=model, niter=niter, burnin=burnin, thinning=thinning, rptp=rptp, jumps=jumps, ini.pars=ini.pars.mat[sim,], priors=priors, lifetable=lifetable)
+		outBS   = BayesSurv(Data=Data, ststart=ststart, stend=stend, model=model, niter=niter, burnin=burnin, thinning=thinning, rptp=rptp, jumps=jumps, ini.pars=ini.pars.mat[sim,], priors=priors, lifetable=lifetable, datacheck=FALSE)
 		return(outBS)
 	}
 
