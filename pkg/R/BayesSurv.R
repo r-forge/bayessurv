@@ -1,4 +1,6 @@
-BayesSurv = function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50, rptp = ststart, jumps=NULL, ini.pars=NULL, priors=NULL, lifetable = TRUE){
+BayesSurv <-
+function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50, 
+  rptp = ststart, jumps=NULL, ini.pars=NULL, priors=NULL, lifetable = TRUE){
 
 	require(msm)
 	# Basic error checking:
@@ -47,12 +49,14 @@ BayesSurv = function(Data, ststart, stend, model="SI", niter=50000, burnin=5001,
 
 	if(is.null(jumps)){
 		thj       = t(t(modm[rep(idm, nz),])*c(0.005, 0.005, 0.02, 0.0075, 0.001))
+		#thj       = c(0.005, 0.005, 0.02, 0.0075, 0.001)
 	} else {
 		ljumps    = length(jumps)
 		if(ljumps/nthm != round(ljumps/nthm)){
 			stop(paste("length of jumps not multiple of", nthm)) 
 		} else if(ljumps > nth*nz) {
 			stop(paste("length of jumps larger than", nthm * nz))		}
+#		thj       = c(rep(0,nth-nthm),jumps)
 		thj       = modm[rep(idm, nz), ]
 		thj[,modm[idm,]==1] = matrix(jumps,nz, sum(modm[idm,]), byrow=TRUE)
 	}
@@ -65,6 +69,7 @@ BayesSurv = function(Data, ststart, stend, model="SI", niter=50000, burnin=5001,
 			stop(paste("length of starting parameters not multiple of", nthm)) 
 		} else if(lini.pars > nth*nz) {
 			stop(paste("length of starting parameters larger than", nthm * nz))		}
+#		thg       = c(rep(0,nth-nthm),ini.pars)
 		thg       = modm[rep(idm, nz), ]
 		thg[,modm[idm,]==1] = matrix(ini.pars,nz, sum(modm[idm,]), byrow=TRUE)
 	}	
@@ -76,6 +81,7 @@ BayesSurv = function(Data, ststart, stend, model="SI", niter=50000, burnin=5001,
 			stop(paste("length of priors not multiple of", nthm)) 
 		} else if(lpriors > nth*nz) {
 			stop(paste("length of priors larger than", nthm * nz))		}
+#		thp       = c(rep(0,nth-nthm),priors)
 		thp       = modm[rep(idm, nz), ]
 		thp[,modm[idm,]==1] = matrix(priors,nz, sum(modm[idm,]), byrow=TRUE)
 	}
@@ -371,3 +377,4 @@ BayesSurv = function(Data, ststart, stend, model="SI", niter=50000, burnin=5001,
 
 	return(output)
 }
+
