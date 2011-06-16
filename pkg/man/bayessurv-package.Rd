@@ -22,7 +22,7 @@ LazyLoad: \tab yes\cr
 }
 
 This package estimates mortality parameters from capture-recapture data where there are individuals with unknown birth/death dates.
-It is currently under development.
+It is currently under development and cannot be expected to work perfectly yet!
 
 }
 
