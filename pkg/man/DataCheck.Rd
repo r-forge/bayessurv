@@ -24,14 +24,12 @@ A logical argument indicating whether to automatically fix any errors. This shou
 }
 \details{
 Further details of the autofix argument:
-1)
+**To be completed.**
 
 }
+
 \value{
-
-     return(list(ok=ok, newData=data.frame(idnames,bd,Y), type0=type0, type1=type1, type2=type2, type3=type3, type4=type4, 
-            type5=type5)
-
+This function returns a list object with the following properties.
   \item{ok }{A logical indicator that indicates if the data are free of errors or not. i.e. TRUE = the data are ok.}
   \item{newData }{A corrected data frame.}
   \item{type0 }{A vector of row numbers in the original data frame where there are deaths before the observation window starts.}
@@ -42,18 +40,18 @@ Further details of the autofix argument:
   \item{type5 }{A vector of row numbers in the original data frame where the year of birth is not a zero in the recapture matrix.}
   \item{type5 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.
 }
-\references{}
+
+%\references{}
+
 \author{
 Owen Jones \email{jones@mpg.demogr.de}
 Maren Rebke \email{rebke@mpg.demogr.de}
 }
-\note{
-}
+
+%\note{}
 
 
-\seealso{
-\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}
-}
-\examples{}
+\seealso{\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}}
+%\examples{Need to add a working example}
 
 \keyword{ misc }
