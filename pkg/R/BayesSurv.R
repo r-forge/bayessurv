@@ -9,8 +9,8 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	}
 	
     #Check that niter, burnin, and thinning are compatible.
-    if(burnin>niter) stop("Burnin larger than niter.")
-    if(thinning>niter) stop("Thinning larger than niter.")
+    if(burnin>niter) stop("\nObject 'burnin' larger than 'niter'.")
+    if(thinning>niter) stop("\nObject 'thinning' larger than 'niter'.")
 
 	# Data formating:
 	Ti          = ststart
@@ -159,6 +159,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	thgibbs     = matrix(NA,ng,length(idth))
 	colnames(thgibbs) = pname[idth]
 	pigibbs     = matrix(NA, ng, npi)
+	colnames(pigibbs) = paste("pi.", diffrec,sep="")
 	bgibbs      = matrix(NA,0,n)
 	dgibbs      = bgibbs
 	postm       = matrix(NA, ng, 3)
@@ -259,7 +260,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		pig         = rbeta(npi, Rho1, Rho2)
 		if(1 %in% pig){
 			pig[pig==1] = 1-1e-5
-			warning("Some recapture probabilities are equal to 1\nThey have been constraint to be fractionally less than 1 for computational reasons")
+			warning("Some recapture probabilities are equal to 1\nThey have been constraint to be fractionally less than 1 for computational reasons", call.=FALSE)
 		} 
 		Pig         = pig[idpi]
 		
@@ -285,7 +286,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 			text(g, 0.15, paste(round(g/ng*100), "%", sep=""), cex=0.8)
 		}
 	}
-	cat("MCMC finished running")
+	cat("MCMC finished running\n")
 	dev.off(progrpl)
 	
 	# RESULTS SUMMARY:
