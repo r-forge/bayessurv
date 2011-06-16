@@ -5,6 +5,6 @@ Version: 1.0
 Date: 2011-06-10
 Author: Fernando Colchero, Owen Jones, Maren Rebke
 Maintainer: Fernando Colchero <colchero@mpg.demogr.de>
-Description: More about what it does (maybe more than one line)
+Description: This package estimates mortality with covariates from capture-recapture/recovery data in a Bayesian framework when many individuals are of unknown age. It includes tools for data checking, model diagnostics and outputs such as life-tables and plots.
 License: GNU GPL
 LazyLoad: yes
