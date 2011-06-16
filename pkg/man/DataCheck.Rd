@@ -43,13 +43,16 @@ Further details of the autofix argument:
   \item{type5 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.
 }
 \references{}
-\author{Owen R. Jones and Maren Rebke}
+\author{
+Owen Jones \email{jones@mpg.demogr.de}
+Maren Rebke \email{rebke@mpg.demogr.de}
+}
 \note{
 }
 
 
 \seealso{
-\code{\link{BayesSurv}}
+\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}
 }
 \examples{}
 
