@@ -50,10 +50,6 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		}
 	}
 
-	rownames(ini.pars.mat) = paste('set.', 1:nsim, sep="")
-	print("Set of initial parameters:")
-	print(ini.pars.mat)
-	
 	# Parallel function:
 	paralBS   = function(sim){
 		if(parallel) for(ii in 1:(sim*2)){}
@@ -62,32 +58,30 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	}
 
 	# Run multiple BayesSurv simulations:
+	Start      = Sys.time()
+	cat("\nMultiple simulations started.\n")
 	if(parallel){
 		availpkg     = available.packages()
 		if(!is.element("snowfall", availpkg)){
 			warning("\nPackage 'snowfall' is not installed.\nSimulations will not be ran in parallel (computing time will be longer...)\n")
-			cat("\nMultiple simulations started.\n")
 			OutBS   = lapply(1:nsim, paralBS)
 			names(OutBS) = paste("Sim.", 1:nsim)
-			cat("\nMultiple simulations finished.\n")
 		} else {
 			require(snowfall)
-			sfInit(parallel=TRUE, cpus=ncpus)
+			sfInit(parallel=TRUE, cpus=ncpus);
 			sfExport("Data", "ststart", "stend", "model", "niter", "burnin", "thinning", "rptp", "jumps", "ini.pars.mat", "priors", "BayesSurv", "DataCheck", "BayesSurvDIC", "fx.fun", "mx.fun", "Sx.fun", "ObsMatFun", "c.low","parallel","lifetable")
 			sfLibrary(msm)
-			cat("\nMultiple simulations started.\n")
 			OutBS = sfClusterApplyLB(1:nsim, paralBS)
 			sfStop()
 			names(OutBS) = paste("Sim.", 1:nsim)
-			cat("\nMultiple simulations finished.\n")
 		}
 	} else {
-		cat("\nMultiple simulations started.\n")
 		OutBS   = lapply(1:nsim, paralBS)
 		names(OutBS) = paste("Sim.", 1:nsim)
-		cat("\nMultiple simulations finished.\n")
 	}
-
+	cat("\nMultiple simulations finished.\n")
+	End        = Sys.time()
+	cat(paste("\nMultiple MCMC computing time: ", round(as.numeric(julian(End)-julian(Start))*24*60, 2), " minutes\n", sep=""))
 
 	# Collect results:
 	simname    = paste("Sim.", 1:nsim, sep="")
@@ -95,6 +89,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	tnpi       = ncol(OutBS[[1]]$pi)
 	tnni       = ncol(OutBS[[1]]$bis)
 	tnpo       = ncol(OutBS[[1]]$post)
+
 	thing      = seq(burnin, niter, thinning)
 	nthin      = length(thing)
 	thmat      = array(NA, dim=c(nthin, tnth, nsim), dimnames=list(NULL, colnames(OutBS[[1]]$theta), simname)) 
@@ -103,6 +98,9 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	ximat      = array(NA, dim=c(nthin, tnni, nsim), dimnames=list(NULL, NULL, simname))
 	pomat      = array(NA, dim=c(nthin, tnpo, nsim), dimnames=list(NULL, colnames(OutBS[[1]]$post), simname))
 	DImat      = matrix(NA, nsim, 5, dimnames = list(simname, colnames(OutBS[[1]]$ModSel))) 
+	if(lifetable){
+		ltmat    = array(NA, dim=c(nrow(OutBS[[1]]$LT), ncol(OutBS[[1]]$LT), nsim), dimnames=list(rownames(OutBS[[1]]$LT), colnames(OutBS[[1]]$LT), simname))
+	} 
 	for(i in 1:nsim){
 		thmat[,,i]  = OutBS[[i]]$theta[thing,]
 		pimat[,,i]  = OutBS[[i]]$pi[thing,]
@@ -110,6 +108,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 		ximat[,,i]  = OutBS[[i]]$dis - OutBS[[i]]$bis
 		pomat[,,i]  = OutBS[[i]]$post[thing,]
 		DImat[i,]   = OutBS[[i]]$ModSel
+		if(lifetable) ltmat[,,i] = OutBS[[i]]$LT
 	} 
 
 	# RESULTS SUMMARY:
@@ -167,11 +166,19 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	Rhat       = sqrt(Varpl/W)
 	conv       = cbind(B,W,Varpl,Rhat)
 	rownames(conv) = colnames(OutBS[[1]]$theta)
-
+	
+	
+	# assess convergence:
+	idnconv    = which(conv[,'Rhat']< 0.95 | conv[,'Rhat']>1.2)
+	if(length(idnconv)>0){
+		warning("Convergence not reached for some survival parameters", call.=FALSE)
+	} else {
+		cat("Survival parameters converged appropriately.")
+	} 
 
 	#Return a list object
 	output = list(bd = OutBS[[1]]$bd,Y = OutBS[[1]]$Y,Z = OutBS[[1]]$Z, post=pomat, ng=niter, bng = burnin, thint = thing, theta=thmat, pi = pimat, bis = bimat, xis = ximat, thsum = thq, pisum=piq, xqsum=xq, Sxsum = Sxq, mxsum = mxq, modm=modm, idm=idm, jumps=jumps, ini.pars=ini.pars.mat, priors=priors, convergence=conv)
-
+	if(lifetable) output$LT = ltmat
 	return(output)
 }
 
