@@ -17,7 +17,7 @@ MakeCovariateMatrix(x)
 
 %\references{ }
 
-\author{Owen R. Jones}
+\author{Owen Jones \email{jones@mpg.demogr.de}}
 
 %\note{ }
 
