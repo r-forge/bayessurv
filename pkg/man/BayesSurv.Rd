@@ -29,7 +29,8 @@ Number of iterations for the burn in.
 The thinning parameter.
 }
   \item{rptp}{
-%%     ~~Describe \code{rptp} here~~
+RPTP is a vector defining the recapture probability transition points. These are points (years) where the recapture probability is thought to change.  The default setting is for the recapture probability to be constant throughout the study, so the RPTP is simply defined as a single element vector of the first year of the observation period (e.g. c(1985)).
+If one wanted to set a different recapture probability for years after (say) 1990, the RPTP could be defined as c(1985, 1990) etc..
 }
   \item{jumps}{
 A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   c(alpha1, beta1, c, alpha2, beta2)
@@ -46,11 +47,11 @@ A logical argument specifying whether a cohort-based life table should be produc
   \item{datacheck}{
 A logical argument specifying whether the input data should be checked for errors or not.}
 }
+
 \details{
-
 Further details will be added here.
-
 }
+
 \value{
 The function returns a "BayesSurv" list object with the following elements:
 
@@ -79,19 +80,20 @@ The function returns a "BayesSurv" list object with the following elements:
 \item{LT }{Description of 'comp1'}
 
 }
+
 \references{
 Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
 Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
 }
+
 \author{
 Fernando Colchero \email{colchero@mpg.demogr.de}
 }
-\note{}
-
 
 \seealso{
 \code{\link{BayesSurvParall}}, \code{\link{BayesSurvPlots}}, \code{\link{BayesSurvDIC}}, \code{\link{DataCheck}}, \code{\link{CohortLT}}
 }
+
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
