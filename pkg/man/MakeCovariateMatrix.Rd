@@ -15,14 +15,14 @@ MakeCovariateMatrix(x)
 
 \value{Returns a matrix with a number of rows equal to the number of individuals, and a column for each level in the input vector.}
 
-\references{ }
+%\references{ }
 
 \author{Owen R. Jones}
 
-\note{ }
+%\note{ }
 
 \seealso{
-  \code{\link{BayesSurv}}
+  \code{\link{BayesSurv}},   \code{\link{BayesSurvParall}},   \code{\link{DataCheck}}
   }
 
 \examples{
