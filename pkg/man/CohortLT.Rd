@@ -29,7 +29,7 @@ Start and end of the interval, where start of the interval is defined as x, lx (
 Preston et al. 2001. Demography: Measuring and modeling population processes. Blackwell Publishers.
 }
 
-\author{Owen R. Jones}
+\author{Owen Jones \email{jones@mpg.demogr.de}}
 %\note{}
 
 %\seealso{ }
