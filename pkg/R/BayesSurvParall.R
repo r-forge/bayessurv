@@ -9,7 +9,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
     if(thinning>niter) stop("\nObject 'thinning' larger than 'niter'.")
 
 	# Check that nsim is larger than 1:
-	if(nsim<=1) stop("\nObject nsim needs to be larger than 1.")
+	if(nsim<=1) stop("\nObject 'nsim' needs to be larger than 1.")
 
 	# Basic error checking:
 	tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
@@ -32,7 +32,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 			while(test.pj){
 				ini.pars.mat[i,] = rtnorm(nth, c(-1, 0.001, 0, -1, 0.001), 0.25, lower=th.low[idm,])
 				if(idm>1){
-					clow     = c.low(ini.pars.mat[i,])
+					clow     = c.low(ini.pars.mat[i,], idm=idm)
 					if(ini.pars.mat[i,3]<clow) ini.pars.mat[i,3] = rtnorm(1, 0, 0.5, lower=clow)
 				}
 				test.pars    = TestIniPars(Data=Data,ini.pars=ini.pars.mat[i,modm[idm,]==1], ststart=ststart,stend=stend,model=model)
@@ -151,8 +151,6 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	nz        = ncol(OutBS[[1]]$Z)
 	pmat      = matrix(0, 0, nth * nz); colnames(pmat) = colnames(thmat)
 	for(i in 1:nsim) pmat = rbind(pmat, thmat[,,i])
-#	pmat      = matrix(0, length(thing), nth * nz); colnames(pmat) = pname
-#	pmat[,colnames(thgibbs)] = thmat
 	xv        = seq(0, max(xq), 0.1)
 	Sxq       = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
 	            "[",zz,"]", sep="")],1,S.x),1, quantile, c(0.5,0.025,0.975)))
