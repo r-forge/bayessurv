@@ -2,7 +2,10 @@
 \alias{BayesSurv}
 
 \title{A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.}
-\description{ }
+\description{
+A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.
+Further details required!!
+}
 \usage{
 BayesSurv(Data, ststart, stend, model = "SI", niter = 50000, burnin = 5001, thinning = 50, rptp = ststart, jumps = NULL, ini.pars = NULL, priors = NULL, lifetable = TRUE, datacheck = TRUE)
 }
