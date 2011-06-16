@@ -2,22 +2,19 @@
 \alias{BayesSurvPlots}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
-}
+A function to produce summary plots from a BayesSurv analysis}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+
 }
 \usage{
 BayesSurvPlots(outBS)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{outBS}{
-%%     ~~Describe \code{outBS} here~~
+  \item{outBS}{A BayesSurv object ouput from \code{\link{BayesSurv}} or \code{\link{BayesSurvParall}}
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+This function plots parameter traces from the MCMC analysis, the survival and mortality trajectories and ...
 }
 \value{
 %%  ~Describe the value returned
@@ -27,26 +24,28 @@ BayesSurvPlots(outBS)
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
+Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
 }
 \author{
-%%  ~~who you are~~
+Fernando Colchero \email{colchero@mpg.demogr.de}
 }
-\note{
-%%  ~~further notes~~
-}
+
+%\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}
 }
+
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
+
 function(outBS){
 	require(RColorBrewer)
 	if(.Platform$OS.type=="unix") devtype=quartz else devtype=windows
@@ -84,5 +83,6 @@ for(i in 1:ncol(outBS$Z)) polygon(c(xv, rev(xv)), c(outBS$mxsum[[i]][2,], rev(ou
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
+\keyword{ methods }
+\keyword{ hplot }
