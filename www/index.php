@@ -43,9 +43,17 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> No content added. </p>
+<p> This package implements the methods presented in Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. </p>
+<p> The developers are Fernando Colchero, Maren Rebke and Owen Jones, all based at the Max Planck Institute for Demorgraphic Research in Rostock.</p>
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p> Our web pages:
+
+<a href="https://sites.google.com/site/fernandocolchero/home">Fernando Colchero</a>
+<a href="https://sites.google.com/site/jonesor/home">Owen Jones</a>
+<a href="http://www.demogr.mpg.de/en/staff/rebke/">Maren Rebke</a> or <a href="http://www.bio-demography.org/maren.html">here</a>.
+</p>
+
+<p> The <strong>project summary page</strong> can be found <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 </body>
 </html>
