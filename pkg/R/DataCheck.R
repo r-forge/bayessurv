@@ -14,7 +14,7 @@ function(Data, ststart, stend, autofix = rep(0,7), silent=TRUE) {
 #Type 6: 0 = do nothing; 1 = replace birth year element of observation matrix with 0
 #Type 7: 0 = do nothing; 1 = replace death year element of observation matrix with 0
 
-if(autofix == TRUE) stop("Autofix specification should be a numerical vector of length 7.")
+#if(autofix == TRUE) stop("Autofix specification should be a numerical vector of length 7.")
 
     Ti         = ststart
 	Tf         = stend
@@ -40,7 +40,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type1)
         
         #Actions - remove those rows from bd, Y and Z
-        if (autofix == 1) {
+        if (autofix[1] == 1) {
             bd = bd[-type1, ]
             Y = Y[-type1, ]
             idnames=idnames[-type1]
@@ -57,7 +57,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type2)
         
         #Actions - remove those rows from bd, Y and Z
-        if (autofix == 1) {
+        if (autofix[2] == 1) {
             bd = bd[-type2, ]
             Y = Y[-type2, ]
             idnames=idnames[-type2]
@@ -79,9 +79,9 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type3)
         
         #Actions - remove the death, birth, both records?
-        if (autofix == 1) {bd[type3,2] = 0; cat("The death records have been replaced with 0.\n\n")}
-        if (autofix == 2) {bd[type3,1] = 0; cat("The birth records have been replaced with 0\n")}
-        if (autofix == 3) {bd[type3,1:2] = 0; cat("The birth and death records have been replaced with 0\n")}
+        if (autofix[3] == 1) {bd[type3,2] = 0; cat("The death records have been replaced with 0.\n\n")}
+        else if (autofix[3] == 2) {bd[type3,1] = 0; cat("The birth records have been replaced with 0\n")}
+        else if (autofix[3] == 3) {bd[type3,1:2] = 0; cat("The birth and death records have been replaced with 0\n")}
         }
     
 # 4. Observations after death
@@ -98,7 +98,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type4)
         
         #Actions - remove spurious post-death observations
-        if (autofix == 1) {
+        if (autofix[4] == 1) {
         	 Ymd  = ((Tm - bd[,2]) * Y)[type4,]
         	 Ymd[Ymd>0]  = 0
         	 Ymd[Ymd<0]   = 1
@@ -124,7 +124,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type5)
         
         #Actions - remove spurious pre-birth observations
-        if (autofix == 1) {
+        if (autofix[5] == 1) {
         	 Ymd  = ((Tm - bd[,1]) * Y)[type5,]
         	 Ymd[Ymd>0]  = 1
         	 Ymd[Ymd<0]   = 0
@@ -152,7 +152,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type6)
         
         #Actions - put a zero.
-        if (autofix == 1) Y[bpos] = 0
+        if (autofix[6] == 1) Y[bpos] = 0
    }
     
 # 7. Year of death should be a zero in recapture matrix Y
@@ -165,7 +165,7 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         print(type7)
         
         #Actions - put a zero.
-        if (autofix == 1) Y[dpos] = 0
+        if (autofix[7] == 1) Y[dpos] = 0
     }   
 
     
