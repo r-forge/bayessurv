@@ -14,6 +14,7 @@ function(Data, ststart, stend, autofix = rep(0,7), silent=TRUE) {
 #Type 6: 0 = do nothing; 1 = replace birth year element of observation matrix with 0
 #Type 7: 0 = do nothing; 1 = replace death year element of observation matrix with 0
 
+if(autofix == TRUE) stop("Autofix specification should be a numerical vector of length 7.")
 
     Ti         = ststart
 	Tf         = stend
