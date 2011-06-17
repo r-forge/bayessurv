@@ -4,7 +4,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 	require(msm)
 	# Basic error checking:
 	if(datacheck){
-		tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
+		tempcheck   = DataCheck(Data, ststart, stend, silent=TRUE)
 		if(tempcheck[[1]] == FALSE){ stop("You have an error in Dataframe 'Data',\nplease use function 'DataCheck'") }
 	}
 	
