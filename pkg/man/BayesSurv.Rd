@@ -37,16 +37,21 @@ If one wanted to set a different recapture probability for years after (say) 199
 }
   \item{jumps}{
 A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   c(alpha1, beta1, c, alpha2, beta2)
-The jumps for Gompertz-Makeham are specified as c(c,alpha,beta), and the jumps for Gompertz are specified as c(alpha,beta). Any additional elements in the vector are ignored (e.g. if a Gompertz model is specified, but a vector with 5 elements is provided, only the first two will be used (as alpha and beta jumps respectively).
+The jumps for Gompertz-Makeham are specified as c(c,alpha,beta), and the jumps for Gompertz are specified as c(alpha,beta). 
+Any additional elements in the vector are ignored (e.g. if a Gompertz model is specified, but a vector with 5 elements is provided, only the first two will be used (as alpha and beta jumps respectively)).
 }
   \item{ini.pars}{
-A vector defining the initial parameter values for each parameter. The vector takes the same format as described for \code{jumps}.}
-  \item{priors}{
-A vector defining the priors for each parameter. The vector takes the same format as described for \code{jumps}.}
+A vector defining the initial parameter values for each parameter. The vector takes the same format as described for \code{jumps}.
 }
+
+  \item{priors}{
+A vector defining the priors for each parameter. The vector takes the same format as described for \code{jumps}.
+}
+
   \item{lifetable}{
 A logical argument specifying whether a cohort-based life table should be produced or not. The life table produced has the same format as produced by \code{CohortLT}.
 }
+
   \item{datacheck}{
 A logical argument specifying whether the input data should be checked for errors or not.}
 }
