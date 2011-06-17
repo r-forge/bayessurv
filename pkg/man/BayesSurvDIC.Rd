@@ -1,9 +1,7 @@
 \name{BayesSurvDIC}
 \alias{BayesSurvDIC}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
-}
+\title{A function to calculate the Deviance Information Criterion (DIC) from a BayesSurv object.}
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
