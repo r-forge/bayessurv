@@ -73,7 +73,7 @@ BayesSurvFancyPlot    = function(outBS){
 
 	axis(1, seq(0,mxv, 5), labels=NA, tcl=0.4, line=0.5)
 	axis(2, seq(0, 1, 0.2), tcl=0.4, las=2, cex.axis=1.2)
-	mtext(expression(paste("Survival prob. ", italic(S(x)))), 2, line=3, cex=1.25)
+	mtext(expression(paste("Survival prob. ", italic(S(x)))), 2, line=3.5, cex=1.25)
 
 	# Plot mortality rates:
 	plot(c(0,mxv), ylmx, col=NA, axes=FALSE, xlab="", ylab="")
@@ -86,7 +86,7 @@ BayesSurvFancyPlot    = function(outBS){
 	axis(1, seq(0,mxv, 5), labels=NA, tcl=0.4, line=0.5)
 	axis(1, at=seq(0,mxv, 5), lwd=NA, cex.axis=1.2)
 	axis(2, seq(0, ylmx[2], length=5), tcl=0.4, las=2, cex.axis=1.2)
-	mtext(expression(paste("Mortality rate ", italic(mu(x)))), 2, line=3, cex=1.25)
+	mtext(expression(paste("Mortality rate ", italic(mu(x)))), 2, line=3.5, cex=1.25)
 	mtext(expression(paste("Age ", italic(x), " (years)")), 1, cex=1.25, line=3)
 
 }
