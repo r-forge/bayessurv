@@ -1,5 +1,7 @@
 BayesSurvFancyPlot    = function(outBS){
 
+	if(.Platform$OS.type=="unix") devtype=quartz else devtype=windows
+
 	thing      = outBS$thint
 	nth        = 5
 	nz         = ncol(outBS$Z)
@@ -38,6 +40,7 @@ BayesSurvFancyPlot    = function(outBS){
 	ylmx       = round(c(0, ifelse(nz>1, max(unlist(mx)), max(mx))))
 	mxv        = ceiling(max(xm)/5)*5
 	
+	devtype(width=6, height=6)
 	layout(matrix(c(rep(1:nthn, each=2), rep(rep(c(nthn+1, nthn+2),each=nthn), 2)), nthn*2, 3), widths = rep(2, 3), heights=rep(1, nthn))
 	par(mar=c(3,3,0.5,0.5))
 	for(i in 1:nthn){
