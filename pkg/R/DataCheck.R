@@ -75,8 +75,6 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
     
 # 3. Observations after death
     # Calculate first and last time observed: 
-    # (ANOTHER ISSUE, DEATH YEARS HAPPENING BEFORE THE STUDY STARTED...)
-    # I think I fixed this above (type0 error)
     st = Ti:Tf
     ytemp = t(t(Y) * st)
     lastObs = c(apply(ytemp, 1, max))
