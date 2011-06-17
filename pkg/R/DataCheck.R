@@ -1,7 +1,19 @@
 DataCheck <-
-function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
+function(Data, ststart, stend, autofix = rep(0,7), silent=TRUE) {
 
 #ToDo: add code to specify variations on what to do with the autofix
+#Autofix = a vector that defines whether, and how, to fix a problematic dataset.
+#It is a vector with 7 elements (one for each type of error), and the numbers 
+#specify how to deal with the error.
+#The default is c(0,0,0,0,0,0,0) - to do nothing.
+#Type 1: 0 = do nothing; 1 = remove from dataframe
+#Type 2: 0 = do nothing; 1 = remove from dataframe
+#Type 3: 0 = do nothing; 1 = replace death records with 0; 2 = replace birth records with 0; 3 = replace both birth and death records with 0
+#Type 4: 0 = do nothing; 1 = remove spurious post-death observations
+#Type 5: 0 = do nothing; 1 = remove observations that pre-date year of birth 
+#Type 6: 0 = do nothing; 1 = replace birth year element of observation matrix with 0
+#Type 7: 0 = do nothing; 1 = replace death year element of observation matrix with 0
+
 
     Ti         = ststart
 	Tf         = stend
@@ -27,7 +39,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type1)
         
         #Actions - remove those rows from bd, Y and Z
-        if (autofix == TRUE) {
+        if (autofix == 1) {
             bd = bd[-type1, ]
             Y = Y[-type1, ]
             idnames=idnames[-type1]
@@ -44,7 +56,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type2)
         
         #Actions - remove those rows from bd, Y and Z
-        if (autofix == TRUE) {
+        if (autofix == 1) {
             bd = bd[-type2, ]
             Y = Y[-type2, ]
             idnames=idnames[-type2]
@@ -65,11 +77,10 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         cat("The following rows have birth dates that are later than their death dates:\n")
         print(type3)
         
-        #Actions - remove the death record?
-        if (autofix == TRUE) {
-        bd[type3,2] = 0; cat("The death records have been replaced with 0.\n\n")#remove death record
-    #   bd[type3,1] = 0; cat("The birth records have been replaced with 0\n") #remove birth record
-    #   bd[type3,1:2] = 0; cat("The birth and death records have been replaced with 0\n") #remove birth and death record
+        #Actions - remove the death, birth, both records?
+        if (autofix == 1) {bd[type3,2] = 0; cat("The death records have been replaced with 0.\n\n")}
+        if (autofix == 2) {bd[type3,1] = 0; cat("The birth records have been replaced with 0\n")}
+        if (autofix == 3) {bd[type3,1:2] = 0; cat("The birth and death records have been replaced with 0\n")}
         }
     }
     
@@ -87,7 +98,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type4)
         
         #Actions - remove spurious post-death observations
-        if (autofix == TRUE) {
+        if (autofix == 1) {
         	 Ymd  = ((Tm - bd[,2]) * Y)[type4,]
         	 Ymd[Ymd>0]  = 0
         	 Ymd[Ymd<0]   = 1
@@ -113,7 +124,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type5)
         
         #Actions - remove spurious pre-birth observations
-        if (autofix == TRUE) {
+        if (autofix == 1) {
         	 Ymd  = ((Tm - bd[,1]) * Y)[type5,]
         	 Ymd[Ymd>0]  = 1
         	 Ymd[Ymd<0]   = 0
@@ -141,7 +152,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type6)
         
         #Actions - put a zero.
-        if (autofix == TRUE) Y[bpos] = 0
+        if (autofix == 1) Y[bpos] = 0
    }
     
 # 7. Year of death should be a zero in recapture matrix Y
@@ -154,7 +165,7 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
         print(type7)
         
         #Actions - put a zero.
-        if (autofix == TRUE) Y[dpos] = 0
+        if (autofix == 1) Y[dpos] = 0
     }   
 
     
@@ -184,10 +195,10 @@ function(Data, ststart, stend, autofix = FALSE, silent=TRUE) {
 
     if (ncol(Data)>nt+3) {
         return(list(ok=ok, newData=data.frame(idnames,bd,Y,Z), type1=type1, type2=type2, type3=type3, type4=type4, type5=type5, 
-            type6=type6))
+            type6=type6, type7=type7))
     } else {
         return(list(ok=ok, newData=data.frame(idnames,bd,Y), type1=type1, type2=type2, type3=type3, type4=type4, type5=type5, 
-            type6=type6))
+            type6=type6, type7=type7))
     }
 }
 
