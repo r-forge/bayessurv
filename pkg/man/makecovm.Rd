@@ -1,49 +1,45 @@
 \name{makecovm}
 \alias{makecovm}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{
-%%  ~~function to do ... ~~
-}
+A function to produce a covariate matrix for BayesSurv}
+
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function produces a covariate matrix for a BayesSurv analysis from a given dataset with covariates.
+The covariates must be 'numeric' or 'factor' class.
 }
+
 \usage{
 makecovm(Data, covs)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{Data}{
-%%     ~~Describe \code{Data} here~~
-}
+A data frame with covariates}
   \item{covs}{
-%%     ~~Describe \code{ini.pars} here~~
+A character vector with the names of the desired covariates (e.g. c("Sex","Location","Weight"))
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+%\details{}
+
+\value{
+Returns a matrix to be used as the covariate matrix for BayesSurv
+}
+
+%\references{ }
+
+\author{
+Owen Jones \email{jones@mpg.demogr.de}
+}
+
+\note{
+This is really intended as an internal function to be called by \code{\link{BayesSurv}}}
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BayesSurv}},\code{\link{BayesSurvParall}}
 }
+
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
@@ -54,5 +50,4 @@ makecovm(Data, covs)
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ methods }
