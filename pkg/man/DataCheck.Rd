@@ -18,8 +18,19 @@ The start year of the observation window.
 }
   \item{stend}{
 The end year of the observation window.}
-  \item{autofix}{
-A logical argument indicating whether to automatically fix any errors. This should be used with extreme caution. We recommend going back to the individual-based data and fixing each error "by hand".}
+  \item{autofix}{A numerical vector with a length of 7 that defines whether, and how, to fix a problematic dataset.
+Each of the 7 elements of the vector refers to one of the 7 possible error types 1-7. #specify how to deal with the error.
+The default is c(0,0,0,0,0,0,0) - to do nothing. Users can specify how each error is dealt with as follows.
+
+Type 1 (death before the observation window starts): 0 = do nothing; 1 = remove from dataframe
+Type 2 (no birth/death AND no obervations): 0 = do nothing; 1 = remove from dataframe
+Type 3 (births recorded after death): 0 = do nothing; 1 = replace death records with 0; 2 = replace birth records with 0; 3 = replace both birth and death records with 0
+Type 4 (observations after death): 0 = do nothing; 1 = remove spurious post-death observations
+Type 5 (observations before birth): 0 = do nothing; 1 = remove observations that pre-date year of birth 
+Type 6 (year of birth is not a zero in the recapture matrix): 0 = do nothing; 1 = replace birth year element of observation matrix with 0
+Type 7 (year of death is not a zero in the recapture matrix): 0 = do nothing; 1 = replace death year element of observation matrix with 0
+
+This should be used with extreme caution. We recommend going back to the individual-based data and fixing each error "by hand".}
   \item{silent}{A logical argument indicating whether to print a detailed report to the screen or not.}
 }
 \details{
@@ -47,7 +58,8 @@ Owen Jones \email{jones@mpg.demogr.de}
 Maren Rebke \email{rebke@mpg.demogr.de}
 }
 
-%\note{}
+\note{We recommend using the \code{autofix} option only with extreme caution.
+We recommend going back to the individual-based data and fixing each error "by hand".}
 
 
 \seealso{\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}}
