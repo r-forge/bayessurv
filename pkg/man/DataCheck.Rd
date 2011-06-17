@@ -38,9 +38,8 @@ This function returns a list object with the following properties.
   \item{type3 }{A vector of row numbers in the original data frame where there are observations after death.}
   \item{type4 }{A vector of row numbers in the original data frame where there are observations before birth.}
   \item{type5 }{A vector of row numbers in the original data frame where the year of birth is not a zero in the recapture matrix.}
-  \item{type5 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.
+  \item{type5 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.}
 }
-
 %\references{}
 
 \author{
