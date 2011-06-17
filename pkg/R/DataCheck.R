@@ -83,7 +83,6 @@ if(autofix == TRUE) stop("Autofix specification should be a numerical vector of 
         if (autofix == 2) {bd[type3,1] = 0; cat("The birth records have been replaced with 0\n")}
         if (autofix == 3) {bd[type3,1:2] = 0; cat("The birth and death records have been replaced with 0\n")}
         }
-    }
     
 # 4. Observations after death
     # Calculate first and last time observed: 
