@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{A function to calculate the Deviance Information Criterion (DIC) from a BayesSurv object.}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+This function calculates the Deviance Information Criterion (DIC) from a BayesSurv object. The DIC is a measure of model fit and can be used to compare different nested models, where a lower DIC reflects a higher predictive power of the model.
 }
 \usage{
 BayesSurvDIC(outBS)
@@ -17,16 +17,17 @@ BayesSurvDIC(outBS)
 }
 \value{
 %%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+\item{D.ave }{Posterior mean deviance}
+\item{D.mode }{Deviance at the parameter estimates}
+\item{pD }{Effective number of parameters in the model}
+\item{k }{Number of parameters in the model}
+\item{DIC }{Deviance Information Criterion}
 }
 \references{
-%% ~put references to the literature/web site here ~
+Spiegelhalter D.J., Best N.G. and Carlin B.P. (1998) Bayesian deviance, the effective number o parameters, and the comparison of arbitrarily complex models. Technical Report, MRC Biostatistics Unit, Cambridge, UK.  
 }
 \author{
-%%  ~~who you are~~
+Fernando Colchero, Maren Rebke
 }
 
 %\note{}
@@ -40,28 +41,6 @@ BayesSurvDIC(outBS)
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(outBS){
-	
-# Calculate DIC
-thin	    = seq(outBS$bng,outBS$ng,outBS$thint)
-modepost   = outBS$post[thin,3]
-L          = length(thin)
-Dm         = -2*modepost
-Dmode      = -2*modepost[which(modepost==max(modepost))[1]]
-Dave       = mean(Dm)
-pD         = Dave - Dmode
-k          = ncol(outBS$pi)+sum(outBS$modm[outBS$idm,]*ncol(outBS$Z))
-DIC        = 2*Dave - Dmode
-ModSel     = c(Dave, Dmode, pD, k, DIC)
-names(ModSel) = c("D.ave", "D.mode", "pD", "k", "DIC")
-
-	
-#Return ModSel
-return(ModSel)
-	
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
