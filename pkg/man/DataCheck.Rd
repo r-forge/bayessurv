@@ -32,13 +32,13 @@ Further details of the autofix argument:
 This function returns a list object with the following properties.
   \item{ok }{A logical indicator that indicates if the data are free of errors or not. i.e. TRUE = the data are ok.}
   \item{newData }{A corrected data frame.}
-  \item{type0 }{A vector of row numbers in the original data frame where there are deaths before the observation window starts.}
-  \item{type1 }{A vector of row numbers in the original data frame where there are no birth/death AND no obervations.}
-  \item{type2 }{A vector of row numbers in the original data frame where there are births recorded after death.}
-  \item{type3 }{A vector of row numbers in the original data frame where there are observations after death.}
-  \item{type4 }{A vector of row numbers in the original data frame where there are observations before birth.}
-  \item{type5 }{A vector of row numbers in the original data frame where the year of birth is not a zero in the recapture matrix.}
-  \item{type5 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.}
+  \item{type1 }{A vector of row numbers in the original data frame where there are deaths before the observation window starts.}
+  \item{type2 }{A vector of row numbers in the original data frame where there are no birth/death AND no obervations.}
+  \item{type3 }{A vector of row numbers in the original data frame where there are births recorded after death.}
+  \item{type4 }{A vector of row numbers in the original data frame where there are observations after death.}
+  \item{type5 }{A vector of row numbers in the original data frame where there are observations before birth.}
+  \item{type6 }{A vector of row numbers in the original data frame where the year of birth is not a zero in the recapture matrix.}
+  \item{type7 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.}
 }
 %\references{}
 
