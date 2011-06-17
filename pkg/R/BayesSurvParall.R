@@ -12,7 +12,7 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	if(nsim<=1) stop("\nObject 'nsim' needs to be larger than 1.")
 
 	# Basic error checking:
-	tempcheck   = DataCheck(Data, ststart, stend, autofix = FALSE, silent=TRUE)
+	tempcheck   = DataCheck(Data, ststart, stend, silent=TRUE)
 	if(tempcheck[[1]] == FALSE){ stop("You have an error in Dataframe 'Data',\nplease use function 'DataCheck'") }
 
 	# Model Matrix and boundary values for parameters:
