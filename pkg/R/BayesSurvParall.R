@@ -147,29 +147,35 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	m.x         = function(th) mx.fun(xv, matrix(th,1,nth), idm=idm)
 
 	# Median and 95% predictive intervals for survival and mortality:
-	nz        = ncol(OutBS[[1]]$Z)
-	pmat      = matrix(0, 0, nth * nz); colnames(pmat) = colnames(thmat)
-	for(i in 1:nsim) pmat = rbind(pmat, thmat[,,i])
-	xv        = seq(0, max(xq), 0.1)
-	Sxq       = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
+	nz          = ncol(OutBS[[1]]$Z)
+	pname       = paste(rep(colnames(modm),each=nz), "[",rep(colnames(OutBS[[1]]$Z), nth),"]", sep="")
+	pmat        = matrix(0, 0, nth * nz); colnames(pmat) = pname
+	for(i in 1:nsim){
+		npmat   = matrix(0, nthin, nth * nz)
+		colnames(npmat) = pname
+		npmat[,colnames(thmat)] = thmat[,,i]
+		pmat    = rbind(pmat, npmat)
+	} 
+	xv          = seq(0, max(xq), 0.1)
+	Sxq         = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
 	            "[",zz,"]", sep="")],1,S.x),1, quantile, c(0.5,0.025,0.975)))
-	mxq       = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
+	mxq         = lapply(colnames(OutBS[[1]]$Z), function(zz) apply(apply(pmat[,paste(colnames(modm), 
 	            "[",zz,"]", sep="")],1,m.x),1, quantile, c(0.5,0.025,0.975)))
 
 	# Convergence diagnostics (potential scale reduction):
-	Means      = t(apply(thmat, c(2,3), mean))
-	Vars       = t(apply(thmat, c(2,3), var))
-	meanall    = apply(Means,2,mean)
-	B          = nthin/(nsim-1)*apply(t((t(Means)-meanall)^2),2,sum)
-	W          = 1/nsim*apply(Vars,2,sum)
-	Varpl      = (nthin-1)/nthin * W + 1/nthin*B
-	Rhat       = sqrt(Varpl/W)
-	conv       = cbind(B,W,Varpl,Rhat)
+	Means       = t(apply(thmat, c(2,3), mean))
+	Vars        = t(apply(thmat, c(2,3), var))
+	meanall     = apply(Means,2,mean)
+	B           = nthin/(nsim-1)*apply(t((t(Means)-meanall)^2),2,sum)
+	W           = 1/nsim*apply(Vars,2,sum)
+	Varpl       = (nthin-1)/nthin * W + 1/nthin*B
+	Rhat        = sqrt(Varpl/W)
+	conv        = cbind(B,W,Varpl,Rhat)
 	rownames(conv) = colnames(OutBS[[1]]$theta)
 	
 	
 	# assess convergence:
-	idnconv    = which(conv[,'Rhat']< 0.95 | conv[,'Rhat']>1.2)
+	idnconv     = which(conv[,'Rhat']< 0.95 | conv[,'Rhat']>1.2)
 	if(length(idnconv)>0){
 		warning("Convergence not reached for some survival parameters", call.=FALSE)
 	} else {
