@@ -17,7 +17,7 @@ BayesSurvFancyPlot    = function(outBS){
 		parr   = matrix(0,0,nthn*nz); colnames(parr) = pname
 		for(i in 1:nsim) parr  = rbind(parr, outBS$theta[,,i])
 	} else {
-		parr   = outBS$theta[outBS$thint,]
+		parr   = outBS$theta[seq(outBS$bng, outBS$ng, outBS$thint),]
 	}
 
 
