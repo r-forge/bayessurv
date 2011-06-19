@@ -47,6 +47,7 @@ This is really intended as an internal function to be called by \code{\link{Baye
 
 ## The function is currently defined as
 
+}
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
