@@ -63,29 +63,29 @@ Further details will be added here.
 \value{
 The function returns a "BayesSurv" list object with the following elements:
 
-\item{bd }{Description of 'comp1'}
-\item{Y }{Description of 'comp1'}
-\item{Z }{Description of 'comp1'}
-\item{postm }{Description of 'comp1'}
-\item{g }{Description of 'comp1'}
-\item{ng }{Description of 'comp1'}
-\item{bng }{Description of 'comp1'}
-\item{thint }{Description of 'comp1'}
-\item{theta }{Description of 'comp1'}
-\item{pi }{Description of 'comp1'}
-\item{bis }{Description of 'comp1'}
-\item{dis }{Description of 'comp1'}
-\item{thsum }{Description of 'comp1'}
-\item{pisum }{Description of 'comp1'}
-\item{xqsum }{Description of 'comp1'}
-\item{Sxsum }{Description of 'comp1'}
-\item{mxsum }{Description of 'comp1'}
-\item{modm }{Description of 'comp1'}
-\item{idm }{Description of 'comp1'}
-\item{jumps }{Description of 'comp1'}
-\item{ini.pars }{Description of 'comp1'}
-\item{priors }{Description of 'comp1'}
-\item{LT }{Description of 'comp1'}
+\item{bd }{Description}
+\item{Y }{Description}
+\item{Z }{Description}
+\item{postm }{Description}
+\item{g }{Description}
+\item{ng }{Description}
+\item{bng }{Description}
+\item{thint }{Description}
+\item{theta }{Description}
+\item{pi }{Description}
+\item{bis }{Description}
+\item{dis }{Description}
+\item{thsum }{Description}
+\item{pisum }{Description}
+\item{xqsum }{Description}
+\item{Sxsum }{Description}
+\item{mxsum }{Description}
+\item{modm }{Description}
+\item{idm }{Description}
+\item{jumps }{Description}
+\item{ini.pars }{Description}
+\item{priors }{Description}
+\item{LT }{Description}
 
 }
 
