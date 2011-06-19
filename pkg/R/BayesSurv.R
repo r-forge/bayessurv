@@ -57,7 +57,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		} else if(ljumps > nth*nz) {
 			stop(paste("length of jumps larger than", nthm * nz))		}
 		thj       = modm[rep(idm, nz), ]
-		thj[,modm[idm,]==1] = matrix(jumps,nz, sum(modm[idm,]), byrow=TRUE)
+		thj[,modm[idm,]==1] = matrix(t(jumps),nz, sum(modm[idm,]), byrow=TRUE)
 	}
 
 	if(is.null(ini.pars)){
@@ -69,7 +69,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		} else if(lini.pars > nth*nz) {
 			stop(paste("length of starting parameters larger than", nthm * nz))		}
 		thg       = modm[rep(idm, nz), ]
-		thg[,modm[idm,]==1] = matrix(ini.pars,nz, sum(modm[idm,]), byrow=TRUE)
+		thg[,modm[idm,]==1] = matrix(t(ini.pars),nz, sum(modm[idm,]), byrow=TRUE)
 	}	
 	
 	if(is.null(priors)){
@@ -80,7 +80,7 @@ function(Data, ststart, stend, model="SI", niter=50000, burnin=5001, thinning=50
 		} else if(lpriors > nth*nz) {
 			stop(paste("length of priors larger than", nthm * nz))		}
 		thp       = modm[rep(idm, nz), ]
-		thp[,modm[idm,]==1] = matrix(priors,nz, sum(modm[idm,]), byrow=TRUE)
+		thp[,modm[idm,]==1] = matrix(t(priors),nz, sum(modm[idm,]), byrow=TRUE)
 	}
 
 
