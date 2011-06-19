@@ -10,17 +10,23 @@ This function performs some basic error checking on the input files for a BayesS
 DataCheck(Data, ststart, stend, autofix = FALSE, silent = TRUE)
 }
 \arguments{
+
   \item{Data}{
-A data.frame to be used as an input data file for BayesSurv. The first column is the individual's ID, the second and third columns are birth and death years respectively. Columns 4-(n-1) represent the observation window of n years. This is followed (optionally) by a column for a covariate.
+A data.frame to be used as an input data file for BayesSurv. The first column is the individual's ID, the second and third columns are birth and death years respectively. 
+Columns 4-(n-1) represent the observation window of n years. This is optionally followed optionally columns for covariates, which much be of class factor, or numeric.
 }
+
   \item{ststart}{
 The start year of the observation window.
 }
+
   \item{stend}{
-The end year of the observation window.}
+The end year of the observation window.
+}
+
   \item{autofix}{A numerical vector with a length of 7 that defines whether, and how, to fix a problematic dataset.
 Each of the 7 elements of the vector refers to one of the 7 possible error types 1-7. #specify how to deal with the error.
-The default is c(0,0,0,0,0,0,0) - to do nothing. Users can specify how each error is dealt with as follows.
+The default is \code{c(0,0,0,0,0,0,0)} - to do nothing. Users can specify how each error is dealt with as follows.
 
 Type 1 (death before the observation window starts): 0 = do nothing; 1 = remove from dataframe
 Type 2 (no birth/death AND no obervations): 0 = do nothing; 1 = remove from dataframe
@@ -30,13 +36,15 @@ Type 5 (observations before birth): 0 = do nothing; 1 = remove observations that
 Type 6 (year of birth is not a zero in the recapture matrix): 0 = do nothing; 1 = replace birth year element of observation matrix with 0
 Type 7 (year of death is not a zero in the recapture matrix): 0 = do nothing; 1 = replace death year element of observation matrix with 0
 
-This should be used with extreme caution. We recommend going back to the individual-based data and fixing each error "by hand".}
+This should be used with extreme caution. We recommend going back to the individual-based data and fixing each error "by hand".
+}
+
   \item{silent}{A logical argument indicating whether to print a detailed report to the screen or not.}
 }
+
 \details{
 Further details of the autofix argument:
 **To be completed.**
-
 }
 
 \value{
@@ -51,6 +59,7 @@ This function returns a list object with the following properties.
   \item{type6 }{A vector of row numbers in the original data frame where the year of birth is not a zero in the recapture matrix.}
   \item{type7 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.}
 }
+
 %\references{}
 
 \author{
@@ -63,6 +72,7 @@ We recommend going back to the individual-based data and fixing each error "by h
 
 
 \seealso{\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}}
-%\examples{Need to add a working example}
+\examples{
+Need to add a working example.}
 
 \keyword{ misc }
