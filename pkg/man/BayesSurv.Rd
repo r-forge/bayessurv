@@ -1,11 +1,14 @@
 \name{BayesSurv}
 \alias{BayesSurv}
 
-\title{A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.}
+\title{A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.
+}
+
 \description{
 A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.
 Further details required!!
 }
+
 \usage{
 BayesSurv(Data, ststart, stend, model = "SI", niter = 50000, burnin = 5001, thinning = 50, rptp = ststart, jumps = NULL, ini.pars = NULL, priors = NULL, lifetable = TRUE, datacheck = TRUE)
 }
@@ -21,7 +24,9 @@ The first year of the observation matrix.
 The last year of the observation matrix.
 }
   \item{model}{
-The underlying mortality model used. "GO"= Gompertz, "GM" = Gompertz-Makeham and "SI" = Siler.}
+The underlying mortality model used. "GO"= Gompertz, "GM" = Gompertz-Makeham and "SI" = Siler.
+}
+
   \item{niter}{
 The number of iterations for the MCMC process.
 }
@@ -33,11 +38,11 @@ The thinning parameter.
 }
   \item{rptp}{
 RPTP is a vector defining the recapture probability transition points. These are points (years) where the recapture probability is thought to change.  The default setting is for the recapture probability to be constant throughout the study, so the RPTP is simply defined as a single element vector of the first year of the observation period (e.g. c(1985)).
-If one wanted to set a different recapture probability for years after (say) 1990, the RPTP could be defined as c(1985, 1990) etc..
+If one wanted to set a different recapture probability for years after (say) 1990, the RPTP could be defined as \code{c(1985, 1990)} etc.
 }
   \item{jumps}{
-A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   c(alpha1, beta1, c, alpha2, beta2)
-The jumps for Gompertz-Makeham are specified as c(c,alpha,beta), and the jumps for Gompertz are specified as c(alpha,beta). 
+A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   \code{c(alpha1, beta1, c, alpha2, beta2)}.
+The jumps for Gompertz-Makeham are specified as \code{c(c,alpha,beta)}, and the jumps for Gompertz are specified as c(alpha,beta). 
 Any additional elements in the vector are ignored (e.g. if a Gompertz model is specified, but a vector with 5 elements is provided, only the first two will be used (as alpha and beta jumps respectively)).
 }
   \item{ini.pars}{
@@ -53,7 +58,8 @@ A logical argument specifying whether a cohort-based life table should be produc
 }
 
   \item{datacheck}{
-A logical argument specifying whether the input data should be checked for errors or not.}
+A logical argument specifying whether the input data should be checked for errors or not.
+}
 }
 
 \details{
