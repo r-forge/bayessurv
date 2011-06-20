@@ -2,10 +2,10 @@
 \alias{c.low}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+An internal function called by BayesSurv routines.
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+An internal function called by BayesSurv routines.
 }
 \usage{
 c.low(th, idm = 3)
@@ -13,15 +13,14 @@ c.low(th, idm = 3)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{th}{
-%%     ~~Describe \code{th} here~~
+     ~~Describe \code{th} here~~
 }
   \item{idm}{
-%%     ~~Describe \code{idm} here~~
+     ~~Describe \code{idm} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+%\details{}
+
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -30,19 +29,18 @@ c.low(th, idm = 3)
 %% ...
 }
 \references{
-%% ~put references to the literature/web site here ~
+Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
+Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
 }
 \author{
-%%  ~~who you are~~
+Fernando Colchero \email{colchero@mpg.demogr.de}
 }
-\note{
-%%  ~~further notes~~
-}
+%\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}} 
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
@@ -62,5 +60,5 @@ function(th, idm=3){
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ methods }
+%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
