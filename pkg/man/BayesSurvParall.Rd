@@ -9,7 +9,7 @@ Further details required!!
 \usage{
 BayesSurvParall(Data, ststart, stend, nsim = 5, parallel = FALSE, ncpus = 2, ini.pars.mat = NULL, model = "SI", niter = 50000, burnin = 5001, thinning = 50, rptp = ststart, jumps = NULL, priors = NULL, lifetable = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
+
 
 \arguments{
   \item{Data}{
@@ -34,7 +34,7 @@ The number of CPUs to use in the analysis
 %%     ~~Describe \code{ini.pars.mat} here~~
 }
   \item{model}{
-The underlying mortality model used. "GO"= Gompertz, "GM" = Gompertz-Makeham and "SI" = Siler.}
+The underlying mortality model used. "GO"= Gompertz, "GM" = Gompertz-Makeham and "SI" = Siler.
 }
   \item{niter}{
 The number of iterations for the MCMC process.
