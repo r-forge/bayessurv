@@ -4,18 +4,22 @@
 \title{
 A function to produce summary plots from a BayesSurv analysis}
 \description{
-
+A function to produce summary plots from a BayesSurv analysis
 }
+
 \usage{
 BayesSurvPlots(outBS)
 }
+
 \arguments{
   \item{outBS}{A BayesSurv object ouput from \code{\link{BayesSurv}} or \code{\link{BayesSurvParall}}
 }
 }
+
 \details{
 This function plots parameter traces from the MCMC analysis, the survival and mortality trajectories and ...
 }
+
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -23,10 +27,12 @@ This function plots parameter traces from the MCMC analysis, the survival and mo
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
+
 \references{
 Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
 Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
 }
+
 \author{
 Fernando Colchero \email{colchero@mpg.demogr.de}
 }
@@ -84,5 +90,5 @@ for(i in 1:ncol(outBS$Z)) polygon(c(xv, rev(xv)), c(outBS$mxsum[[i]][2,], rev(ou
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 
-\keyword{ methods }
+\keyword{ utilities }
 \keyword{ hplot }
