@@ -1,4 +1,5 @@
 \name{CohortLT}
+
 \alias{CohortLT}
 
 \title{A function for calculating standard cohort-based life tables from age at death data.

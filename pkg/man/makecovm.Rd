@@ -1,4 +1,5 @@
 \name{makecovm}
+
 \alias{makecovm}
 
 \title{
@@ -6,7 +7,7 @@ A function to produce a covariate matrix for BayesSurv}
 
 \description{
 This function produces a covariate matrix for a BayesSurv analysis from a given dataset with covariates.
-The covariates must be 'numeric' or 'factor' class.
+The covariates must be 'numeric' or 'factor' class. It is intended as an internal function to be called by \code{\link{BayesSurv}}.
 }
 
 \usage{

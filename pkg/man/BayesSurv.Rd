@@ -95,6 +95,7 @@ The function returns a "BayesSurv" list object with the following elements:
 
 }
 
+
 \references{
 Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
 Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
@@ -103,6 +104,8 @@ Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameter
 \author{
 Fernando Colchero \email{colchero@mpg.demogr.de}
 }
+
+%\note{}
 
 \seealso{
 \code{\link{BayesSurvParall}}, \code{\link{BayesSurvPlots}}, \code{\link{BayesSurvDIC}}, \code{\link{DataCheck}}, \code{\link{CohortLT}}

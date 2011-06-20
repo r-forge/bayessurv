@@ -1,4 +1,5 @@
 \name{Sx.fun}
+
 \alias{Sx.fun}
 
 \title{

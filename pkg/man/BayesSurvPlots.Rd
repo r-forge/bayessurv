@@ -1,8 +1,11 @@
 \name{BayesSurvPlots}
+
 \alias{BayesSurvPlots}
 %- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{
 A function to produce summary plots from a BayesSurv analysis}
+
 \description{
 A function to produce summary plots from a BayesSurv analysis
 }
@@ -87,8 +90,9 @@ for(i in 1:ncol(outBS$Z)) polygon(c(xv, rev(xv)), c(outBS$mxsum[[i]][2,], rev(ou
 
   }
 }
+
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-
 \keyword{ utilities }
 \keyword{ hplot }

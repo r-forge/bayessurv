@@ -1,6 +1,6 @@
 \name{TestIniPars}
-\alias{TestIniPars}
 
+\alias{TestIniPars}
 
 \title{
 A function to perform preliminary viability tests on the initial parameters of a BayesSurv analysis}
@@ -207,6 +207,7 @@ function(Data, ini.pars=NULL, ststart, stend, model="SI", jumps=NULL){
 	return(list(Pars = ModifyPars, Jumps = ModifyJumps, values=c(px, pxl, pxu)))
   }
 }
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ utilities }

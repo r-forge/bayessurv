@@ -1,14 +1,19 @@
 \name{DataCheck}
+
 \alias{DataCheck}
+
 \title{
 A function to check the input data file for a BayesSurv analysis.
 }
+
 \description{
 This function performs some basic error checking on the input files for a BayesSurv analysis. A number of checks are performed including (1) individuals dying before the observation window starts; (2) birth date recorded as being after death date; (3) no observations of any kind (phantom individuals); (4) observations before birth; (5) observations after death; (6) years of birth and deaths must appear as 0 in the observation matrix.
 }
+
 \usage{
 DataCheck(Data, ststart, stend, autofix = FALSE, silent = TRUE)
 }
+
 \arguments{
 
   \item{Data}{
@@ -60,19 +65,25 @@ This function returns a list object with the following properties.
   \item{type7 }{A vector of row numbers in the original data frame where the year of death is not a zero in the recapture matrix.}
 }
 
-%\references{}
+\references{
+Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
+Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
+}
 
 \author{
 Owen Jones \email{jones@mpg.demogr.de}
 Maren Rebke \email{rebke@mpg.demogr.de}
+Fernando Colchero \email{colchero@mpg.demogr.de}
 }
 
 \note{We recommend using the \code{autofix} option only with extreme caution.
-We recommend going back to the individual-based data and fixing each error "by hand".}
-
+We recommend going back to the individual-based data and fixing each error "by hand".
+}
 
 \seealso{\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}}}
+
 \examples{
-Need to add a working example.}
+#Need to add a working example.
+}
 
 \keyword{ misc }
