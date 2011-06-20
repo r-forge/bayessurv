@@ -13,7 +13,7 @@ BayesSurvParall(Data, ststart, stend, nsim = 5, parallel = FALSE, ncpus = 2, ini
 
 \arguments{
   \item{Data}{
-A \code{data.frame} to be used as an input data file for BayesSurv. The first column is the individual's ID, the second and third columns are birth and death years respectively. Columns 4-(n-1) represent the observation window of n years. This is followed (optionally) by a column for a covariate.
+A \code{data.frame} to be used as an input data file for BayesSurv. The first column is the individual's ID, the second and third columns are birth and death years respectively. Columns 4-(n-1) represent the observation window of n years. This is followed (optionally) by columns for covariates, which must be of 'factor' or 'numeric' class.
 }
   \item{ststart}{
 The first year of the observation matrix.
