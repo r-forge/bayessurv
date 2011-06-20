@@ -1,39 +1,39 @@
 \name{TestIniPars}
 \alias{TestIniPars}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
+
 \title{
-%%  ~~function to do ... ~~
-}
+A function to perform preliminary viability tests on the initial parameters of a BayesSurv analysis}
+
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+A function to perform preliminary viability tests on the initial parameters of a BayesSurv analysis.
+This is an internal function called by \code{\link{BayesSurv}} and \code{\link{BayesSurvParall}} and is not intended for use by the user.
 }
+
 \usage{
 TestIniPars(Data, ini.pars = NULL, ststart, stend, model = "SI", jumps = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{Data}{
-%%     ~~Describe \code{Data} here~~
+A \code{data.frame} to be used as an input data file for BayesSurv. The first column is the individual's ID, the second and third columns are birth and death years respectively. Columns 4-(n-1) represent the observation window of n years. This is followed (optionally) by columns for covariates, which must be of 'factor' or 'numeric' class.
 }
   \item{ini.pars}{
-%%     ~~Describe \code{ini.pars} here~~
-}
+A vector of proposed initial parameters.}
   \item{ststart}{
-%%     ~~Describe \code{ststart} here~~
-}
+Start year of the observation matrix}
   \item{stend}{
-%%     ~~Describe \code{stend} here~~
+End year of the observation matrix
 }
   \item{model}{
-%%     ~~Describe \code{model} here~~
-}
+The model used: "GO" = Gompertz; "GM"= Gompertz-Makeham; "SI"=Siler.}
   \item{jumps}{
-%%     ~~Describe \code{jumps} here~~
+A vector of proposed initial parameters.
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
+%\details{}
+
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -41,21 +41,24 @@ TestIniPars(Data, ini.pars = NULL, ststart, stend, model = "SI", jumps = NULL)
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
+
 \references{
-%% ~put references to the literature/web site here ~
+Colchero and Clark 2011 Bayesian inference on age-specific survival from capture-recapture data for censored and truncated data. Journal of Animal Ecology. 
+Colchero, Jones and Rebke. BayesSurv - a package to estimate mortality parameters from incomplete mark-recapture data with covariates. Unpublished Manuscript.
 }
+
 \author{
-%%  ~~who you are~~
+Fernando Colchero \email{colchero@mpg.demogr.de}
 }
-\note{
-%%  ~~further notes~~
-}
+
+%\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BayesSurv}}, \code{\link{BayesSurvParall}} 
 }
+
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
@@ -206,5 +209,5 @@ function(Data, ini.pars=NULL, ststart, stend, model="SI", jumps=NULL){
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ utilities }
+%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
