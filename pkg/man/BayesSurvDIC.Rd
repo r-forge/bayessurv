@@ -27,7 +27,8 @@ BayesSurvDIC(outBS)
 Spiegelhalter D.J., Best N.G. and Carlin B.P. (1998) Bayesian deviance, the effective number o parameters, and the comparison of arbitrarily complex models. Technical Report, MRC Biostatistics Unit, Cambridge, UK.  
 }
 \author{
-Fernando Colchero, Maren Rebke
+Fernando Colchero \email{colchero@mpg.demogr.de}
+Owen Jones \email{jones@mpg.demogr.de}
 }
 
 %\note{}
