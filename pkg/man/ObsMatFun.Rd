@@ -2,8 +2,7 @@
 
 \alias{ObsMatFun}
 
-\title{
-An internal function called by BayesSurv}
+\title{An internal function called by BayesSurv}
 
 \description{
 An internal function called by BayesSurv
