@@ -53,8 +53,8 @@ RPTP is a vector defining the recapture probability transition points. These are
 If one wanted to set a different recapture probability for years after (say) 1990, the RPTP could be defined as c(1985, 1990) etc..
 }
   \item{jumps}{
-A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   c(alpha1, beta1, c, alpha2, beta2)
-The jumps for Gompertz-Makeham are specified as c(c,alpha,beta), and the jumps for Gompertz are specified as c(alpha,beta). 
+A vector defining the size of jumps for each parameter. The jump specifications depend on the model selected. for Siler are specified in the following order:   \code{c(alpha1, beta1, c, alpha2, beta2)}
+The jumps for Gompertz-Makeham are specified as \code{c(c,alpha,beta)}, and the jumps for Gompertz are specified as \code{c(alpha,beta)}. 
 Any additional elements in the vector are ignored (e.g. if a Gompertz model is specified, but a vector with 5 elements is provided, only the first two will be used (as alpha and beta jumps respectively)).
 }
   \item{priors}{
