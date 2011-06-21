@@ -1,13 +1,16 @@
 \name{BayesSurvParall}
 \alias{BayesSurvParall}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{A function to conduct a BayesSurv analyis with the option of running in parallel.}
+
 \description{
 A function to perform Bayesian estimation of latent stats (birth and death year) using an undelying mortality model.
 Further details required!!
 }
+
 \usage{
-BayesSurvParall(Data, ststart, stend, nsim = 5, parallel = FALSE, ncpus = 2, ini.pars.mat = NULL, model = "SI", niter = 50000, burnin = 5001, thinning = 50, rptp = ststart, jumps = NULL, priors = NULL, lifetable = FALSE)
+function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NULL, model="SI", niter=50000, burnin=5001, thinning=50, rptp = ststart, jumps=NULL, priors=NULL, lifetable = FALSE){
 }
 
 
@@ -31,7 +34,7 @@ A logical argument indicating whether to run the analyses in parallel (TRUE) or 
 The number of CPUs to use in the analysis
 }
   \item{ini.pars.mat}{
-%%     ~~Describe \code{ini.pars.mat} here~~
+A matrix of initial parameters. Number of columns should be appropriate to the number of terms in the model (2 for Gompertz, 3 for Gompertz-Makeham, 5 for Siler).
 }
   \item{model}{
 The underlying mortality model used. "GO"= Gompertz, "GM" = Gompertz-Makeham and "SI" = Siler.
@@ -54,21 +57,18 @@ A vector defining the size of jumps for each parameter. The jump specifications 
 The jumps for Gompertz-Makeham are specified as c(c,alpha,beta), and the jumps for Gompertz are specified as c(alpha,beta). 
 Any additional elements in the vector are ignored (e.g. if a Gompertz model is specified, but a vector with 5 elements is provided, only the first two will be used (as alpha and beta jumps respectively)).
 }
-  \item{ini.pars}{
-A vector defining the initial parameter values for each parameter. The vector takes the same format as described for \code{jumps}.
-}
-
   \item{priors}{
 A vector defining the priors for each parameter. The vector takes the same format as described for \code{jumps}.
 }
-
   \item{lifetable}{
 A logical argument specifying whether a cohort-based life table should be produced or not. The life table produced has the same format as produced by \code{CohortLT}.
 }
 }
+
 \details{
 Further details will be added here.
 }
+
 \value{
 The function returns a "BayesSurv" list object with the following elements:
 (Copied from BayesSurv - therefore needs changing)
@@ -114,6 +114,7 @@ Fernando Colchero \email{colchero@mpg.demogr.de}
 \seealso{
 \code{\link{BayesSurv}}, \code{\link{BayesSurvPlots}}, \code{\link{BayesSurvDIC}}, \code{\link{DataCheck}}, \code{\link{CohortLT}}
 }
+
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
@@ -229,6 +230,8 @@ function(Data, ststart, stend, nsim=5, parallel=FALSE, ncpus=2, ini.pars.mat=NUL
 	return(OutBS)
   }
 }
+
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{methods}
