@@ -32,7 +32,6 @@ Fernando Colchero \email{colchero@mpg.demogr.de}
 Owen Jones \email{jones@mpg.demogr.de}
 
 Maren Rebke \email{rebke@mpg.demogr.de}
-
 }
 
 \references{
