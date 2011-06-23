@@ -16,7 +16,7 @@ A vector of unique identifier of individual animals.
 A vector of dates, which can be of class "Date" or a character vector of another format.}
   \item{dformat}{
 A description of the format of \code{d}. This is only used if \code{d} is not a \code{Date} object.
-The default format is \code{"dd/mm/yyyy"}. The only part of the expression used by the function is "\code{yyyy}". Examples include "yyyy", "mm\yyyy", "mmyyyy", "yyyy-mm" etc.
+The default format is \code{dd/mm/yyyy}. The only part of the expression used by the function is \code{yyyy}. Examples include \code{yyyy}, \code{mm\yyyy}, \code{mmyyyy}, \code{yyyy-mm} etc.
 }
 }
 
@@ -55,4 +55,3 @@ Y
 % R documentation directory.
 
 \keyword{ utilities }
-#\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
